@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+require "rubdian"
+require "rubdian/version"
+require "logger"
+
+Rubdian.logger.level = Logger::DEBUG
+logger = Rubdian.logger
+
+logger.debug("Starting rubdian #{Rubdian::VERSION}")
+
