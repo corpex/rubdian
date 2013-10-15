@@ -1,0 +1,10 @@
+rubdian:
+    distexec:
+        backend:
+            driver: Cpx::Distexec::Backend::Puppet::Loader
+            require: "cpx/distexec/backend/puppet"
+        executor:
+            driver: Cpx::Distexec::Executor::SSH
+            require: "cpx/distexec/executor/ssh"
+
+
