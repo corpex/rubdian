@@ -1,17 +1,67 @@
+#
+# rubdian configuration file
+#
 rubdian:
-    # configure database connection
+
+    #
+    # We need some text here
+    #
+    #
     commands:
+        # this command will be used to gather all
+        # informations about updates. you should not
+        # remove the whole line. instead, you can modify
+        # it to fit your needs but ensure to run apt-get upgrade -s
+        # as rubdian is parsing its output and won't work without it.
+        # this might be changed in the future.
         collect: sudo apt-get upgrade -s
+
+        # this command will be used to actually run the upgrade.
         upgrade: sudo apt-get upgrade
 
-    database:
-        driver: mysql
-        username: root
-        password:
-        hostname: localhost
-        database: rubdian
 
-    # configure the distexec backend
+    #
+    # Database settings
+    #
+    # rubdian is using sequel for its database connection.
+    # this means, rubdian supports all kind of databases
+    # supported by sequel.
+    #
+    # Please check <sequel adapter link>
+    # for a list of supported adapters.
+    #
+    # rubdian is using sqlite3 as its default database.
+    # if you run this only on your local machine, you don't
+    # have to change these settings. this should only be done
+    # in a multisystem environment or if you have your own reasons.
+    #
+    database:
+        driver: sqlite3
+        database: rubdian
+        hostname:
+        username:
+        password:
+
+
+    #
+    # Distexec settings
+    #
+    # rubdian is using distexec for its remote execution.
+    # this means, you can use every backend distexec supports
+    # to retrieve your nodes. you can also change the way
+    # rubdian actually executes its commands by changing
+    # the distexec executor. this is only for advanced
+    # usage and no case where it's been changed is known by now.
+    #
+    # rubdian is using distexec's filebased backend that
+    # supports newline separated text files in the following
+    # format:
+    #
+    # hostname
+    # hostname:port
+    #
+    # see the distexec documentation for more details.
+    #
     distexec:
         backend:
             driver: Cpx::Distexec::Backend::FileBackend
@@ -19,5 +69,4 @@ rubdian:
         executor:
             driver: Cpx::Distexec::Executor::SSH
             require: "cpx/distexec/executor/ssh"
-
 
