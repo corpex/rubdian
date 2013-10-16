@@ -23,4 +23,22 @@ Gem::Specification.new do |spec|
   spec.add_dependency "cpx-distexec"
   spec.add_dependency "cpx-distexec-executor-ssh"
   spec.add_dependency "sequel"
+  spec.add_dependency "colored"
+  spec.add_dependency "sqlite3"
+  spec.add_dependency "highline"
+
+  spec.post_install_message = <<-EOF
+Thank your for using rubdian #{Rubdian::VERSION}.
+
+If this is your first time installing rubdian, please run its setup
+to complete the installation. This can be run either by root or as
+a normal user.
+
+To run the setup type
+
+  $ rubdian setup
+
+and follow the instructions.
+
+EOF
 end
