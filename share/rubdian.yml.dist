@@ -27,7 +27,7 @@ rubdian:
     # this means, rubdian supports all kind of databases
     # supported by sequel.
     #
-    # Please check <sequel adapter link>
+    # Please see http://sequel.rubyforge.org/
     # for a list of supported adapters.
     #
     # rubdian is using sqlite3 as its default database.
@@ -35,13 +35,11 @@ rubdian:
     # have to change these settings. this should only be done
     # in a multisystem environment or if you have your own reasons.
     #
+    # sqlite url: sqlite:///path/to/db
+    # mysql: mysql://username:password@host/db
+    # ...
     database:
-        driver: sqlite3
-        database: rubdian
-        hostname:
-        username:
-        password:
-
+        url:
 
     #
     # Distexec settings

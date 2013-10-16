@@ -28,7 +28,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "highline"
 
   spec.post_install_message = <<-EOF
-Thank your for using rubdian #{Rubdian::VERSION}.
+Thank your for using rubdian #{Rubdian::VERSION}
 
 If this is your first time installing rubdian, please run its setup
 to complete the installation. This can be run either by root or as
@@ -39,6 +39,14 @@ To run the setup type
   $ rubdian setup
 
 and follow the instructions.
+
+NOTICE!!
+If you experience problems with rubdian not being in your PATH,
+uninstall rubdian and reinstall it with
+
+  $ gem install --bindir /usr/local/bin rubdian
+
+or change /usr/local/bin to whatever fits to you.
 
 EOF
 end

@@ -3,8 +3,29 @@ require "logger"
 require "yaml"
 
 module Rubdian
+  @default = {}
+  @default[:home] = "#{ENV['HOME']}/.rubdian"
 
-  def self.load_config(file = '/etc/rubdian/rubdian.yml')
+  @default[:home] = "/etc/rubdian" if ENV['USER'] == "root"
+
+  @default[:home] = ENV['RUBDIAN_HOME'] if ENV['RUBDIAN_HOME']
+
+  @default[:config] = "#{@default[:home]}/rubdian.yml"
+
+  @default[:source] = "#{@default[:home]}/server.list"
+
+  @default[:source] = ENV['RUBDIAN_SOURCE'] if ENV['RUBDIAN_SOURCE']
+
+  @default[:username] = ENV['USER']
+
+  @default[:username] = ENV['SUDO_USER'] if ENV['SUDO_USER']
+
+  @default[:username] = ENV['RUBDIAN_USER'] if ENV['RUBDIAN_USER']
+
+  def self.default
+    return @default
+  end
+  def self.load_config(file = @default[:config])
     @config = YAML.load_file(file)
   end
 

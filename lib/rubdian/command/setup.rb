@@ -3,29 +3,19 @@ require "rubdian/version"
 require "rubdian/trollop"
 require "fileutils"
 require "colored"
-
+require "yaml"
 module Rubdian; module Command
   module Setup
     def self.main(opts = {})
       logger = Rubdian.logger
       logger.debug("Starting setup for rubdian #{Rubdian::VERSION}")
 
-
-      default_dir = "#{ENV['HOME']}/.rubdian"
-      isroot = false
-      if ENV['user'] == "root"
-        default_dir = '/etc/rubdian'
-        isroot = true
-      end
-
-      logger.debug("Default install dir is #{default_dir}")
-
       lopts = Trollop::options do
-        opt :directory, "Install rubdian configuration into this directory.", :short => "-d", :default => default_dir
+        opt :directory, "Install rubdian configuration into this directory.", :short => "-d", :default => Rubdian.default[:home]
+        version "rubdian #{Rubdian::VERSION} (c) 2013 CORPEX Internet GmbH"
       end
 
-      puts "Welcome to rubdian setup\n\n"
-      puts "You can cancel the installation anytime by pressing ctrl+c\n\n"
+      puts "Welcome to rubdian #{Rubdian::VERSION} setup\n".bold
 
       spec = Gem::Specification.find_by_name("rubdian")
       gem_root = spec.gem_dir
@@ -42,11 +32,30 @@ module Rubdian; module Command
       end
 
       conffile = "#{lopts[:directory]}/rubdian.yml"
+      _cfg = conffile
       conffile = "#{conffile}.dist" if File.exists?(conffile)
 
-      puts "Installing default configuration file as #{conffile}"
+      puts "Installing default configuration file as #{conffile}\n\n"
       FileUtils.cp("#{gem_root}/share/rubdian.yml.dist", conffile)
 
+      cfg = YAML.load_file(conffile)
+      cfg['rubdian']['database']['url'] = "sqlite://#{lopts[:directory]}/rubdian.db"
+      File.open(_cfg, "w+") do |f|
+        f.write(cfg.to_yaml)
+      end
+      puts "#" * 80
+      puts "\nInstallation complete!".bold
+      puts "rubdian is using sqlite3 as its default database."
+      puts "If you want to change its database driver, please edit\n\n"
+      puts "\t#{_cfg}\n".bold
+      puts "and change the database connection url. rubdian will\n"
+      puts "automatically install its database schema if possible.\n\n"
+      puts "A default configuration file has been generated to\n\n"
+      puts "\t#{_cfg}\n".bold
+      puts "without comments. To create your very own configuration,\ncopy\n\n"
+      puts "\t#{conffile}\n".bold
+      puts "and start editing.\n\n"
+      puts "Please report bugs to bugs+rubdian@corpex.de\n\n"
     end
   end
 end; end

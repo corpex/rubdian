@@ -4,45 +4,70 @@ require "rubdian"
 require "rubdian/version"
 require "logger"
 require "rubdian/trollop"
-
+require "colored"
 
 # parse arguments
-SUB_COMMANDS = ["setup", "collect", "upgrade", "database", "blacklist", "queue"]
+subcommands = {
+  'blacklist' => 'Blacklist management',
+  'collect' => 'Collect updates',
+  'database'  => 'Install database schema',
+  'queue' => 'Queue management',
+  'setup' => 'Installs default configuration file',
+  'upgrade' => 'Upgrade remote systems'
+}
+
+subs = []
+subcommands.each do |cmd, desc|
+  subs << cmd
+end
 
 gopts = Trollop::options do
-  version = "rubdian #{Rubdian::VERSION} (c) 2013 CORPEX Internet GmbH"
+  version "rubdian #{Rubdian::VERSION}"
   banner "rubdian #{Rubdian::VERSION} (c) 2013 CORPEX Internet GmbH"
   banner ""
   banner "Rubdian is a tool to automatically collect updates on debian based systems."
   banner ""
-  if SUB_COMMANDS.count > 0
-    banner "Subcommands:"
-
-    SUB_COMMANDS.each do |sc|
-      banner "\t#{sc}"
-    end
-    banner ""
-    banner "See rubdian <subcommand> --help for more informations regarding any subcommand"
-    banner "and some usage examples."
+  banner <<-EOF
+Usage: rubdian [global options] subdcommand [options] [arg ... arg]
+EOF
+  banner ""
+  banner "Subcommands:\n".green
+  subcommands.each do |cmd, desc|
+    _len = cmd.length
+    _diff = 20 - _len
+    _sp = " " * _diff
+    _cmd = "#{cmd}".bold
+    banner "  #{_cmd}#{_sp}    #{desc}\n"
   end
   banner ""
-  banner "Global options:"
-  opt :config, "Use different configfile", :short => "-f", :default => '/etc/rubdian/rubdian.yml'
+  banner "See rubdian <subcommand> --help for more informations regarding any subcommand"
+  banner "and some usage examples."
+  banner ""
+  banner "Global options:".bold
+  opt :config, "Use different configfile", :short => "-f", :default => Rubdian.default[:config]
   opt :concurrent, "Number of concurrent threads", :short => "-c", :default => 1
-  opt :list, "Use file as a server list.", :short => "-l", :default => '/etc/rubdian/server.list'
-  opt :username, "Username to use for ssh connections.", :short => "-u", :default => ENV['USER']
+  opt :source, "Use file as a server list.", :short => "-s", :default => Rubdian.default[:source]
+  opt :username, "Username to use for ssh connections.", :short => "-u", :default => Rubdian.default[:username]
   opt :debug, "Enable debug messages.", :short => "-d", :default => false
-  stop_on SUB_COMMANDS
+  stop_on subs
 end
 
 Rubdian.logger.level = Logger::ERROR
 if gopts[:debug]
   Rubdian.logger.level = Logger::DEBUG
 end
+
 cmd = ARGV.shift
 
-if ! SUB_COMMANDS.include? cmd
-  puts "#{cmd} is no valid subcommand. See --help"
+if ! subs.include? cmd
+  $stderr.puts "#{cmd} is no valid subcommand. See --help"
+  exit 1
+end
+
+if ! Dir.exists?(Rubdian.default[:home]) and cmd.chomp != "setup"
+  $stderr.puts "rubdian home #{Rubdian.default[:home]} does not exist."
+  $stderr.puts "If this is your first time with rubdian, please run\n\n"
+  $stderr.puts "  $ rubdian setup\n\n"
   exit 1
 end
 

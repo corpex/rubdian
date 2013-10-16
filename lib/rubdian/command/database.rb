@@ -11,10 +11,11 @@ module Rubdian; module Command
       logger.debug("Starting setup for rubdian #{Rubdian::VERSION}")
 
       lopts = Trollop::options do
-#        opt :directory, "Install rubdian configuration into this directory.", :short => "-d", :default => '/etc/rubdian'
+        banner "no help available"
       end
       cfg = Rubdian.config['rubdian']['database']
-      db = Sequel.connect("#{cfg['driver']}://#{cfg['username']}:#{cfg['password']}@#{cfg['hostname']}/#{cfg['database']}") or abort "Could not connect to database!"
+      #db = Sequel.connect("#{cfg['driver']}://#{cfg['username']}:#{cfg['password']}@#{cfg['hostname']}/#{cfg['database']}") or abort "Could not connect to database!"
+      db = Sequel.connect("#{cfg['url']}") or abort "Could not connect to database!"
 
       if ! db.table_exists? :nodes
         db.create_table :nodes do
