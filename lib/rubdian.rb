@@ -22,6 +22,10 @@ module Rubdian
 
   @default[:username] = ENV['RUBDIAN_USER'] if ENV['RUBDIAN_USER']
 
+  @default[:logdir] = "#{@default[:home]}/logs"
+
+  @default[:logdir] = ENV['RUBDIAN_LOGDIR'] if ENV['RUBDIAN_LOGDIR']
+
   def self.default
     return @default
   end
@@ -43,8 +47,8 @@ module Rubdian
 
   end
 
-  def self.logger(out=STDOUT)
-        @logger = Logger.new(out) if ! @logger
+  def self.logger(out=STDOUT, rotate=nil)
+        @logger = Logger.new(out, rotate) if ! @logger
         return @logger
   end
 end

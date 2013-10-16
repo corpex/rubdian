@@ -10,7 +10,6 @@ require "colored"
 subcommands = {
   'blacklist' => 'Blacklist management',
   'collect' => 'Collect updates',
-  'database'  => 'Install database schema',
   'queue' => 'Queue management',
   'setup' => 'Installs default configuration file',
   'upgrade' => 'Upgrade remote systems'
@@ -52,7 +51,9 @@ EOF
   stop_on subs
 end
 
-Rubdian.logger.level = Logger::ERROR
+Rubdian.logger("#{Rubdian.default[:logdir]}/rubdian.log", "weekly")
+
+Rubdian.logger.level = Logger::INFO
 if gopts[:debug]
   Rubdian.logger.level = Logger::DEBUG
 end

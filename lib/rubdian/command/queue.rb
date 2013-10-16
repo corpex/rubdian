@@ -64,7 +64,6 @@ EOF
               end
             end
             if ! _matched
-              logger.debug("Skipping #{node.hostname}, updates do not match any of #{lopts[:match]}")
               next
             end
           end
@@ -89,11 +88,11 @@ EOF
                 end
               end
               if ! _matched
-                logger.debug("Skipping #{node.hostname}, updates do not match any of #{lopts[:match]}")
+                logger.debug("QUEUE:delete") { "Skipping #{node.hostname}, updates do not match any of #{lopts[:match]}" }
                 next
               end
             end
-            logger.debug("Removing #{node.hostname} from queue.")
+            logger.debug("QUEUE:delete") { "Removing #{node.hostname} from queue." }
             node.queued = false
             node.save
           end
@@ -103,7 +102,7 @@ EOF
           ARGV.each do |h|
             node = Rubdian::Database::Node.filter(:hostname => h).first()
             if node.nil?
-              logger.debug("Skipping #{h}, not queued.")
+              logger.error("QUEUE:delete") { "Can not remove #{h} from queue: not found in database." }
               next
             end
             if lopts[:match].count > 0
@@ -118,7 +117,7 @@ EOF
                 end
               end
               if ! _matched
-                logger.debug("Skipping #{node.hostname}, updates do not match any of #{lopts[:match]}")
+                logger.debug("QUEUE:delete") { "Skipping #{node.hostname}, updates do not match any of #{lopts[:match]}" }
                 next
               end
             end
@@ -136,11 +135,11 @@ EOF
           all = Rubdian::Database::Node.filter
           all.each do |node|
             if node.queued
-              logger.debug("Skipping #{node.hostname}, already queued.")
+              logger.debug("QUEUE:add") { "Skipping #{node.hostname}, already queued." }
               next
             end
             if (! node.blocks.nil? or ! node.blocks.empty?) and ! lopts[:force]
-              logger.warn("Skipping #{node.hostname} due to blocks. (#{node.blocks})")
+              logger.warn("QUEUE:add") { "Skipping #{node.hostname} due to blocks. (#{node.blocks})" }
               next
             end
 
@@ -156,15 +155,17 @@ EOF
                 end
               end
               if ! _matched
-                logger.debug("Skipping #{node.hostname}, updates do not match any of #{lopts[:match]}")
+                logger.debug("QUEUE:add") { "Skipping #{node.hostname}, updates do not match any of #{lopts[:match]}" }
                 next
               end
             end
-            puts "Adding #{node.hostname} to queue\t(#{node.updates})\n"
+            logger.info("QUEUE:add") { "Adding #{node.hostname} to queue. #{node.updates.split(",").count} updates, #{node.blocks.split(",").count} blocks" }
+            puts "Adding #{node.hostname} to queue (#{node.updates})\n"
             node.queued = true
             node.save
           end
           queued = Rubdian::Database::Node.filter(:queued => 1)
+          logger.info("QUEUE:add") { "Queued #{queued.count} hosts." }
           puts "Queued #{queued.count} hosts.\n"
           exit 0
         else
@@ -172,11 +173,11 @@ EOF
           ARGV.each do |h|
             node = Rubdian::Database::Node.filter(:hostname => h).first()
             if node.nil?
-              logger.warn("Skipping #{h}, not found in database.")
+              logger.warn("QUEUE:add") { "Can not queue #{h}: not found in database." }
               next
             end
             if (! node.blocks.nil? or ! node.blocks.empty?) and ! lopts[:force]
-              logger.warn("Skipping #{h} due to blocks. (#{node.blocks})")
+              logger.warn("QUEUE:add") { "Skipping #{node.hostname} due to blocks. (#{node.blocks})" }
               next
             end
 
@@ -197,6 +198,7 @@ EOF
               end
             end
             puts "Adding #{node.hostname} to queue\t(#{node.updates})\n"
+            logger.info("QUEUE:add") { "Adding #{node.hostname} to queue. #{node.updates.split(",").count} updates, #{node.blocks.split(",").count} blocks" }
             node.queued = true
             node.save()
           end

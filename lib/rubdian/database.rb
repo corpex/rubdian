@@ -2,9 +2,28 @@ require "sequel"
 require "rubdian"
 
 module Rubdian; module Database
-  dbcfg = Rubdian.config['rubdian']['database']
   begin
-    @db = Sequel.connect("#{dbcfg['driver']}://#{dbcfg['username']}:#{dbcfg['password']}@#{dbcfg['hostname']}/#{dbcfg['database']}") or abort "Could not connect to database!"
+    cfg = Rubdian.config['rubdian']['database']
+    @db = Sequel.connect("#{cfg['url']}") or abort "Could not connect to database!"
+
+    if ! @db.table_exists? :nodes
+      @db.create_table :nodes do
+        primary_key :id
+        String :hostname
+        Fixnum :port
+        TrueClass :blocked, :default => nil
+        TrueClass :queued, :default => nil
+        String :updates, :text => true, :default => nil
+        String :blocks, :text => true, :default => nil
+        DateTime :tstamp
+      end
+    end
+    if ! @db.table_exists? :blacklist
+      @db.create_table :blacklist do
+        primary_key :id
+        String :package
+      end
+    end
   rescue Sequel::DatabaseError, e
     $stderr.puts "Could not connect to database: #{e.message}"
     $stderr.puts "Did you ran 'rubdian setup'?"

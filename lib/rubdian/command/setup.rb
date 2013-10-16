@@ -30,6 +30,8 @@ module Rubdian; module Command
           logger.error("Could not create directory #{lopts[:directory]}: #{e.message}")
         end
       end
+      puts "Creating log directory #{lopts[:directory]}/logs"
+      FileUtils.mkdir("#{lopts[:directory]}/logs")
 
       conffile = "#{lopts[:directory]}/rubdian.yml"
       _cfg = conffile
