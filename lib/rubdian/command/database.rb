@@ -20,6 +20,7 @@ module Rubdian; module Command
         db.create_table :nodes do
           primary_key :id
           String :hostname
+          Fixnum :port
           TrueClass :blocked, :default => nil
           TrueClass :queued, :default => nil
           String :updates, :text => true, :default => nil

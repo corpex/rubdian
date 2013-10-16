@@ -25,6 +25,9 @@ module Rubdian; module Command
         if n.nil?
           n = Rubdian::Database::Node.new
           n.hostname = node.hostname
+          if ! node.port.nil?
+            n.port = node.port
+          end
         end
         _blocks = []
         _updates = []

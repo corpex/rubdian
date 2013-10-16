@@ -48,7 +48,7 @@ gopts = Trollop::options do
   end
   banner ""
   banner "Global options:"
-  opt :concurrent, "Run n threads in concurrent", :short => "-c", :default => 1
+  opt :concurrent, "Number of concurrent threads", :short => "-c", :default => 1
   opt :list, "Use file as a server list.", :short => "-l", :default => '/etc/rubdian/server.list'
   opt :username, "Username to use for ssh connections.", :short => "-u", :default => ENV['USER']
   stop_on SUB_COMMANDS
