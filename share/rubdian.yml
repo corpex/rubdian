@@ -1,8 +1,21 @@
 rubdian:
+    # configure database connection
+    commands:
+        collect: sudo apt-get upgrade -s
+        upgrade: sudo apt-get upgrade
+
+    database:
+        driver: mysql
+        username: root
+        password:
+        hostname: localhost
+        database: rubdian
+
+    # configure the distexec backend
     distexec:
         backend:
-            driver: Cpx::Distexec::Backend::Puppet::Loader
-            require: "cpx/distexec/backend/puppet"
+            driver: Cpx::Distexec::Backend::FileBackend
+            require: "cpx/distexec/backend/filebackend"
         executor:
             driver: Cpx::Distexec::Executor::SSH
             require: "cpx/distexec/executor/ssh"

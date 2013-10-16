@@ -5,6 +5,13 @@ require "rubdian/version"
 require "logger"
 require "rubdian/trollop"
 
+require "rubdian/command/setup"
+require "rubdian/command/collect"
+require "rubdian/command/upgrade"
+require "rubdian/command/database"
+require "rubdian/command/blacklist"
+require "rubdian/command/queue"
+
 Rubdian.logger.level = Logger::DEBUG
 logger = Rubdian.logger
 
@@ -13,19 +20,46 @@ logger.debug("Starting rubdian #{Rubdian::VERSION}")
 
 # parse arguments
 
-SUB_COMMANDS = ["setup", "collect", "update"]
+SUB_COMMANDS = ["setup", "collect", "upgrade", "database", "blacklist", "queue"]
 SUBS = {
           'setup' => Rubdian::Command::Setup,
+          'database' => Rubdian::Command::Database,
           'collect' => Rubdian::Command::Collect,
-          'update' => Rubdian::Command::Update
+          'upgrade' => Rubdian::Command::Upgrade,
+          'blacklist' => Rubdian::Command::Blacklist,
+          'queue' => Rubdian::Command::Queue,
 }
 
 gopts = Trollop::options do
-  version = "rubdian #{Rubdian::VERSION} (c) 2013 CORPEX Internet GmbH"
+  version = "rubdian #{Rubdian::VERSION} (c) 2013 CORPEX Internet GmbH, http://oss.corpex.de"
+  banner "rubdian #{Rubdian::VERSION} (c) 2013 CORPEX Internet GmbH, http://oss.corpex.de"
+  banner ""
+  banner "Rubdian is a tool to automatically collect updates on debian based hosts."
+  banner ""
+  if SUB_COMMANDS.count > 0
+    banner "Subcommands:"
+
+    SUB_COMMANDS.each do |sc|
+      banner "\t#{sc}"
+    end
+    banner ""
+    banner "See rubdian <subcommand> --help for more informations regarding any subcommand"
+    banner "and some usage examples."
+  end
+  banner ""
+  banner "Global options:"
   opt :concurrent, "Run n threads in concurrent", :short => "-c", :default => 1
+  opt :list, "Use file as a server list.", :short => "-l", :default => '/etc/rubdian/server.list'
+  opt :username, "Username to use for ssh connections.", :short => "-u", :default => ENV['USER']
   stop_on SUB_COMMANDS
 end
 
 cmd = ARGV.shift
 
-logger.debug("Running #{cmd} (#{SUBS[cmd]})")
+if ! SUB_COMMANDS.include? cmd
+  puts "#{cmd} is no valid subcommand. See --help"
+end
+
+_mod = SUBS[cmd]
+_mod.main(gopts)
+

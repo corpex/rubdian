@@ -22,4 +22,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake"
   spec.add_dependency "cpx-distexec"
   spec.add_dependency "cpx-distexec-executor-ssh"
+  spec.add_dependency "sequel"
 end
