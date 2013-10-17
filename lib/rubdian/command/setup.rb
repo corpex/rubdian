@@ -7,9 +7,6 @@ require "yaml"
 module Rubdian; module Command
   module Setup
     def self.main(opts = {})
-      logger = Rubdian.logger
-      logger.debug("Starting setup for rubdian #{Rubdian::VERSION}")
-
       lopts = Trollop::options do
         opt :directory, "Install rubdian configuration into this directory.", :short => "-d", :default => Rubdian.default[:home]
         version "rubdian #{Rubdian::VERSION} (c) 2013 CORPEX Internet GmbH"
@@ -25,22 +22,20 @@ module Rubdian; module Command
         begin
           puts "Creating rubdian directory at #{lopts[:directory]}"
           FileUtils.mkdir(lopts[:directory])
+          puts "Creating log directory #{lopts[:directory]}/logs"
+          FileUtils.mkdir("#{lopts[:directory]}/logs")
         rescue Exception, e
           $stderr.puts "Could not create directory #{lopts[:directory]}: #{e.message}"
-          logger.error("Could not create directory #{lopts[:directory]}: #{e.message}")
         end
       end
-      puts "Creating log directory #{lopts[:directory]}/logs"
-      FileUtils.mkdir("#{lopts[:directory]}/logs")
 
-      conffile = "#{lopts[:directory]}/rubdian.yml"
-      _cfg = conffile
-      conffile = "#{conffile}.dist" if File.exists?(conffile)
+      _cfg = "#{lopts[:directory]}/rubdian.yml"
+      distconf = "#{_cfg}.dist"
 
-      puts "Installing default configuration file as #{conffile}\n\n"
-      FileUtils.cp("#{gem_root}/share/rubdian.yml.dist", conffile)
+      puts "Installing default configuration file as #{distconf}\n\n"
+      FileUtils.cp("#{gem_root}/share/rubdian.yml.dist", distconf)
 
-      cfg = YAML.load_file(conffile)
+      cfg = YAML.load_file(distconf)
       cfg['rubdian']['database']['url'] = "sqlite://#{lopts[:directory]}/rubdian.db"
       File.open(_cfg, "w+") do |f|
         f.write(cfg.to_yaml)
@@ -55,7 +50,7 @@ module Rubdian; module Command
       puts "A default configuration file has been generated to\n\n"
       puts "\t#{_cfg}\n".bold
       puts "without comments. To create your very own configuration,\ncopy\n\n"
-      puts "\t#{conffile}\n".bold
+      puts "\t#{distconf}\n".bold
       puts "and start editing.\n\n"
       puts "Please report bugs to bugs+rubdian@corpex.de\n\n"
     end

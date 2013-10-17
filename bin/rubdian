@@ -51,28 +51,36 @@ EOF
   stop_on subs
 end
 
-Rubdian.logger("#{Rubdian.default[:logdir]}/rubdian.log", "weekly")
-
-Rubdian.logger.level = Logger::INFO
-if gopts[:debug]
-  Rubdian.logger.level = Logger::DEBUG
-end
-
 cmd = ARGV.shift
+
+if cmd.nil?
+  $stderr.puts "See rubdian --help"
+  exit 1
+end
 
 if ! subs.include? cmd
   $stderr.puts "#{cmd} is no valid subcommand. See --help"
   exit 1
 end
 
-if ! Dir.exists?(Rubdian.default[:home]) and cmd.chomp != "setup"
+if ! Dir.exists?(Rubdian.default[:home]) and cmd != "setup"
   $stderr.puts "rubdian home #{Rubdian.default[:home]} does not exist."
   $stderr.puts "If this is your first time with rubdian, please run\n\n"
   $stderr.puts "  $ rubdian setup\n\n"
   exit 1
 end
 
-require "rubdian/command/#{cmd}"
-_mod = eval("Rubdian::Command::#{cmd.capitalize}")
-_mod.main(gopts)
+if cmd != "setup"
+  Rubdian.logger("#{Rubdian.default[:logdir]}/rubdian.log", "weekly")
+  Rubdian.logger.level = Logger::INFO
+  if gopts[:debug]
+    Rubdian.logger.level = Logger::DEBUG
+  end
+end
+
+if cmd
+  require "rubdian/command/#{cmd}"
+  _mod = eval("Rubdian::Command::#{cmd.capitalize}")
+  _mod.main(gopts)
+end
 
