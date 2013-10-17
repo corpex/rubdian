@@ -8,6 +8,10 @@ It can blacklist certain packages to prevent unwanted behaviour.  (e.g. unattend
 
 rubdian needs at least ruby 1.8 and the sqlite3 development headers to build the sqlite3 gem. Support for 1.8 might drop in the future.
 
+**NOTES:**
+rubdian is known to not work on Mac OS X 10.8's ruby-1.8.7.
+However, at least ruby 1.9 or better rvm with ruby 2.0 is suggested.
+
 To install rubdian run:
 
     $ gem install rubdian
