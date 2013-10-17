@@ -17,7 +17,7 @@ rubdian:
         collect: sudo apt-get upgrade -s
 
         # this command will be used to actually run the upgrade.
-        upgrade: sudo apt-get upgrade
+        upgrade: sudo apt-get upgrade -y
 
 
     #

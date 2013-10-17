@@ -42,7 +42,8 @@ module Rubdian; module Command
         _start = Time.now
         _logger.info(_hl)
         _logger.info("Starting upgrade on #{Time.now}")
-        _logger.info("Upgrading following packages:\n#{node.data.updates.split(",").join("\n")}")
+        _logger.info("Upgrading following packages:")
+        _logger.info(node.data.updates.split(",").join(", "))
 
         executor.on_data do |data, type|
           case type
