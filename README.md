@@ -32,7 +32,7 @@ Or, if you want to install it to a different location
 
         $ rubdian setup -l /usr/local/etc/rubdian
 
-Setup will generated a rubdian.yml configuration file without any comments in it. See *$RUBDIAN\_HOME/rubdian.yml.dist* for more informations.
+Setup will generate a rubdian.yml configuration file without any comments in it. See *$RUBDIAN\_HOME/rubdian.yml.dist* for more informations.
 
 ### Rubdian Database
 
