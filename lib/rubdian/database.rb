@@ -4,7 +4,7 @@ require "rubdian"
 module Rubdian; module Database
   begin
     cfg = Rubdian.config['rubdian']['database']
-    @db = Sequel.connect("#{cfg['url']}") or abort "Could not connect to database!"
+    @db = Sequel.connect("#{cfg['uri']}") or abort "Could not connect to database!"
 
     if ! @db.table_exists? :nodes
       @db.create_table :nodes do

@@ -36,7 +36,7 @@ module Rubdian; module Command
       FileUtils.cp("#{gem_root}/share/rubdian.yml.dist", distconf)
 
       cfg = YAML.load_file(distconf)
-      cfg['rubdian']['database']['url'] = "sqlite://#{lopts[:directory]}/rubdian.db"
+      cfg['rubdian']['database']['uri'] = "sqlite://#{lopts[:directory]}/rubdian.db"
       File.open(_cfg, "w+") do |f|
         f.write(cfg.to_yaml)
       end
@@ -45,7 +45,7 @@ module Rubdian; module Command
       puts "rubdian is using sqlite3 as its default database."
       puts "If you want to change its database driver, please edit\n\n"
       puts "\t#{_cfg}\n".bold
-      puts "and change the database connection url. rubdian will\n"
+      puts "and change the database connection uri. rubdian will\n"
       puts "automatically install its database schema if possible.\n\n"
       puts "A default configuration file has been generated to\n\n"
       puts "\t#{_cfg}\n".bold

@@ -50,7 +50,7 @@ EOF
       end
 
       if lopts[:list]
-        all = Rubdian::Database::Node.filter(:queued => 1)
+        all = Rubdian::Database::Node.filter()
         all.each do |node|
           if lopts[:match].count > 0
             _ups = node.updates.split(",")
@@ -67,7 +67,27 @@ EOF
               next
             end
           end
-          puts "#{node.hostname}\t#{node.updates}\n"
+          _queued = ""
+          _queued = "*".green if node.queued
+          _queued = "!".red if ! node.blocks.empty?
+          _queued = "#".yellow if ! node.blocks.empty? and node.queued
+          _blocks = node.blocks.split(",")
+          _updates = node.updates.split(",")
+          _pu = []
+          if _blocks.count > 0
+            _updates.each do |u|
+              if _blocks.include? u
+                _pu << "#{u}".red
+              else
+                _pu << u
+              end
+            end
+          end
+          _len = 40
+          _diff = _len - (node.hostname.length + 4)
+          _ws = " " * _diff
+          #puts "  #{_queued} #{node.hostname}#{_ws}#{_pu.join(", ")}\n"
+          printf("  %s %-40s %-16s\n", _queued, node.hostname, _pu.join(", "))
         end
       end
 

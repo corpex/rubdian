@@ -39,7 +39,7 @@ rubdian:
     # mysql: mysql://username:password@host/db
     # ...
     database:
-        url:
+        uri:
 
     #
     # Distexec settings

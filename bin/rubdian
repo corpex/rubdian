@@ -27,7 +27,7 @@ gopts = Trollop::options do
   banner "Rubdian is a tool to automatically collect updates on debian based systems."
   banner ""
   banner <<-EOF
-Usage: rubdian [global options] subdcommand [options] [arg ... arg]
+Usage: rubdian [options] subdcommand [options] [arg ... arg]
 EOF
   banner ""
   banner "Subcommands:\n".green
