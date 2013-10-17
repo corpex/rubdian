@@ -18,7 +18,7 @@ module Rubdian; module Command
       gem_root = spec.gem_dir
 
       puts "Checking if rubdian directory #{lopts[:directory]} already exists"
-      if ! Dir.exists?(lopts[:directory])
+      if ! File.exists?(lopts[:directory])
         begin
           puts "Creating rubdian directory at #{lopts[:directory]}"
           FileUtils.mkdir(lopts[:directory])
