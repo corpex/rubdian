@@ -14,10 +14,10 @@ rubdian:
         # it to fit your needs but ensure to run apt-get upgrade -s
         # as rubdian is parsing its output and won't work without it.
         # this might be changed in the future.
-        collect: sudo apt-get upgrade -s
+        collect: sudo apt-get autoclean -y && sudo apt-get update -qq && sudo apt-get upgrade -s
 
         # this command will be used to actually run the upgrade.
-        upgrade: sudo apt-get upgrade -y
+        upgrade: sudo bash -c "export DEBIAN_FRONTEND=noninteractive && export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && sudo apt-get upgrade -y"
 
 
     #
