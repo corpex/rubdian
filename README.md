@@ -23,6 +23,7 @@ rubdian will print a post installation message. **It might be worth to read it.*
 Usage: rubdian [options] subdcommand [options] [arg ... arg]
 
 See
+
         $ rubdian --help
 
 ### Setup
