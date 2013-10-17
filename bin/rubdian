@@ -63,7 +63,7 @@ if ! subs.include? cmd
   exit 1
 end
 
-if ! Dir.exists?(Rubdian.default[:home]) and cmd != "setup"
+if ! File.exists?(Rubdian.default[:home]) and cmd != "setup"
   $stderr.puts "rubdian home #{Rubdian.default[:home]} does not exist."
   $stderr.puts "If this is your first time with rubdian, please run\n\n"
   $stderr.puts "  $ rubdian setup\n\n"

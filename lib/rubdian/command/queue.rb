@@ -138,7 +138,7 @@ EOF
               logger.debug("QUEUE:add") { "Skipping #{node.hostname}, already queued." }
               next
             end
-            if (! node.blocks.nil? or ! node.blocks.empty?) and ! lopts[:force]
+            if ! node.blocks.empty? and ! lopts[:force]
               logger.warn("QUEUE:add") { "Skipping #{node.hostname} due to blocks. (#{node.blocks})" }
               next
             end
