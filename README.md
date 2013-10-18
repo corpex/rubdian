@@ -8,7 +8,7 @@ As stated, we are actually *system operators* and not *software developer* where
 
 ## Important informations
 
-rubdian is currently in **alpha** state. This means it might do something not as expected and in the worst case cause serious problems if upgrading an actual blacklisted item due to a bug in the blacklist command.
+rubdian is currently in **alpha** state. This means it might do something not as expected and in the worst case cause serious problems. For example upgrading an actual blacklisted item due to a bug in the blacklist command.
 
 rubdian is being developed in an environment with a hundreds of servers so we actually take care to not break things. Before we use the rubdian development branch (master) on our own, we test it in a simulated environment of a few servers. This does **not** mean that you can expect a working copy in this repository since we don't use any unit tests at all in the moment meaning there is a lot of room for bugs.
 
