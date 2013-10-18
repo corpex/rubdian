@@ -134,7 +134,7 @@ This, of course, breaks plain IPv6 addresses.
 
 rubdian looks by default for a file named **server.list** in it's home directory. You can also provide a different source:
 
-        $ rubdian -s /path/to/my/source
+        $ rubdian -s /path/to/my/server.list
 
 ### Authentication
 
@@ -148,7 +148,7 @@ By default, rubdian expects to authenticate over ssh with key based authenticati
 
         $ rubdian -u yourusername -p
 
-Yo **can not** provide a password with -p on the commandline as it will show up in *ps aux*, *top* or other taskmanager. rubdian will interpret your password as a subcommand and exit with a failure. **It might also write it into its logfile!**
+Yo **can not** provide a password with *-p* on the commandline as it will show up in *ps aux*, *top* or other taskmanager. rubdian will interpret your password as a subcommand and exit with a failure. **It might also write it into its logfile!**
 
 
 ### Blacklist
@@ -157,17 +157,17 @@ Sometimes you don't want to upgrade certain packages and sometimes you're just t
 
 The blacklist is based on regex pattern so by blacklisting *apache* you'll blacklist every package that contains apache in its name.
 
-To add a regex to the blacklist type
+To add a regex to the blacklist:
 
         $ rubdian blacklist -a apache           # all packages with apache in their name
         $ rubdian blacklist -a '^apache'        # all packages starting with apache
         $ rubdian blacklist -a '^apache2$'      # blacklist the exact name of the package
 
-To delete a regex type
+To delete a regex:
 
         $ rubdian blacklist -d '^apache'
 
-To list all type
+To list all:
 
         $ rubdian blacklist -l
 
