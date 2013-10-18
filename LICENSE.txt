@@ -1,4 +1,4 @@
-Copyright (c) 2013 Konrad Lother
+Copyright (c) 2013 CORPEX Internet GmbH
 
 MIT License
 
