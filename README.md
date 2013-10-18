@@ -68,6 +68,8 @@ and add
 
 This will prevent the loss of your custom made changes after a rubdian upgrade.
 
+For a full explanation of every configuration parameter see *$RUBDIAN\_HOME/rubdian.yml.dist* for more details.
+
 ## Usage
 
 Usage: rubdian [options] subdcommand [options] [arg ... arg]
@@ -96,7 +98,7 @@ By default it is using a sqlite3 database *$RUBDIAN\_HOME/rubdian.db*.  The data
 
 rubdian is using Sequel (http://sequel.rubyforge.org/) for its database communication and thus it supports all kind of databases supported by Sequel.
 
-To configure a different database change the database connection uri in *$RUBDIAN\_HOME/rubdian.yml*.
+To configure a different database change the database connection uri in *$RUBDIAN\_HOME/rubdian.local.yml* as described in *$RUBDIAN\_HOME/rubdian.yml.dist*.
 
 ### server.list
 
