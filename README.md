@@ -10,7 +10,7 @@ rubdian needs at least ruby 1.9 and the sqlite3 development headers to build the
 
 To install rubdian run:
 
-    $ gem install rubdian
+        $ gem install rubdian
 
 rubdian will print a post installation message. **It might be worth to read it.**
 
@@ -20,6 +20,12 @@ rubdian will print a post installation message. **It might be worth to read it.*
 To get the latest stable version of rubdian update it with the gem command
 
         $ gem update rubdian
+
+Please ensure to backup your configuration before you upgrade. It is best to backup the whole rubdian homedirectory, except logs. After you did the update for rubdian, rerun
+
+        $ rubdian setup
+
+
 
 ## Usage
 
