@@ -83,10 +83,6 @@ EOF
               end
             end
           end
-          _len = 40
-          _diff = _len - (node.hostname.length + 4)
-          _ws = " " * _diff
-          #puts "  #{_queued} #{node.hostname}#{_ws}#{_pu.join(", ")}\n"
           printf("  %s %-40s %-16s\n", _queued, node.hostname, _pu.join(", "))
         end
       end
