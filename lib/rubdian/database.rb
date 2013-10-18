@@ -24,11 +24,11 @@ module Rubdian; module Database
         String :package
       end
     end
-  rescue Sequel::DatabaseError, e
+  rescue Sequel::DatabaseError => e
     $stderr.puts "Could not connect to database: #{e.message}"
     $stderr.puts "Did you ran 'rubdian setup'?"
     exit 1
-  rescue Exception, e
+  rescue Exception => e
     Rubdian.logger.error("Error while connecting to database: #{e.message}")
   end
   class Node < Sequel::Model(@db[:nodes]); end
