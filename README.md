@@ -24,13 +24,7 @@ Change into the newly created directory
 
         $ cd rubdian
 
-Build and install the gem using bundler
-
-        $ bundle install
-
-If bundler is not install, install it
-
-        $ gem install bundler
+TODO
 
 ## Updating
 
