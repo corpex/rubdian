@@ -14,7 +14,7 @@ rubdian is being developed in an environment with a hundreds of servers so we ac
 
 The rubdian gem is currently only available in our own network and not yet pushed to rubygems.org or something. If you already want to test rubdian, you have to build it from source which makes it even more dangerous to use.
 
-We plan to release rubdian to rubygems.org in version 0.1.0, being the first stable one. There is currently the lack of right error handling and some features we want to include are not yet implemented.
+We plan to release rubdian to rubygems.org in version 0.1.0, being the first stable one. There is currently the lack of good error handling and some features we want to include are not yet implemented.
 
 Nevertheless, if you really want to use rubdian by now, we'd appreciate it if you'd drop us a comment on dev+rubdian@corpex.de or open an issue on github. You can also (and we'd love it) fork this repo and start hacking with us.
 
