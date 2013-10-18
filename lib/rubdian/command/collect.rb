@@ -93,11 +93,13 @@ module Rubdian; module Command
             _logger.info("#{_blocks.count} Blocks: #{_blocks.join(", ")}")
           end
           puts "Finished #{node.hostname} in #{Time.now - _start} seconds."
-          return if _updates.count == 0
-          n.updates = _updates.join(",")
-          n.blocks = _blocks.join(",")
-          n.tstamp = Time.now
-          n.save()
+          if _updates.count > 0
+            puts "#{n.hostname} has updates: #{_updates.join(", ")}\n"
+            n.updates = _updates.join(",")
+            n.blocks = _blocks.join(",")
+            n.tstamp = Time.now
+            n.save()
+          end
         }
       end
     end

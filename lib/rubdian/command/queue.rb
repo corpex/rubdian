@@ -67,20 +67,18 @@ EOF
               next
             end
           end
-          _queued = ""
+          _queued = " "
           _queued = "*".green if node.queued
           _queued = "!".red if ! node.blocks.empty?
           _queued = "#".yellow if ! node.blocks.empty? and node.queued
           _blocks = node.blocks.split(",")
           _updates = node.updates.split(",")
           _pu = []
-          if _blocks.count > 0
-            _updates.each do |u|
-              if _blocks.include? u
-                _pu << "#{u}".red
-              else
-                _pu << u
-              end
+          _updates.each do |u|
+            if _blocks.include? u
+              _pu << "#{u}".red
+            else
+              _pu << u
             end
           end
           printf("  %s %-40s %-16s\n", _queued, node.hostname, _pu.join(", "))
