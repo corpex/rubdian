@@ -14,6 +14,13 @@ To install rubdian run:
 
 rubdian will print a post installation message. **It might be worth to read it.**
 
+
+## Updating
+
+To get the latest stable version of rubdian update it with the gem command
+
+        $ gem update rubdian
+
 ## Usage
 
 Usage: rubdian [options] subdcommand [options] [arg ... arg]
