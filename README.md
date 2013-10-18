@@ -4,6 +4,20 @@ rubdian is a tool to automatically collect available updates on debian based sys
 
 It can blacklist certain packages to prevent unwanted behaviour.  (e.g. unattended restart of a database)
 
+## Important informations
+
+rubdian is currently in **alpha** state. This means it might do something not as expected and in the worst case cause serious problems if upgrading an actual blacklisted item due to a bug in the blacklist command.
+
+rubdian is being developed in an environment with a hundreds of servers so we actually take care to not break things. Before we actually use the rubdian development branch (master) we test it in a simulated environment of a few servers, testing blacklists etc. We do not use unit tests at the moment so it there is lot of room for bugs either trivial or critical.
+
+The rubdian gem is currently only available in our own network and not yet pushed to rubygems.org or something. If you already want to test rubdian, you have to build it from source which makes it even more dangerous to use.
+
+We plan to release rubdian to rubygems.org in version 0.1.0, being the first stable one. There is currently the lack of right error handling and some features we want to have are not even implemented yet.
+
+Nevertheless, if you really want to use rubdian by now, we'd appreciate it if you'd drop us a comment on dev+rubdian@corpex.de or open an issue on github. You can also (and we'd love it) fork this repo and start hacking with us.
+
+Please do not contact us if you need support in using rubdian directly.
+
 ## Installation
 
 rubdian needs at least ruby 1.9 and the sqlite3 development headers to build the sqlite3 gem.
@@ -192,7 +206,7 @@ To queue certain hosts type
 
         $ rubdian queue -a server.domain.tld server3.domain.tld
 
-To queue all hosts that have certain package in their update list type
+To queue all hosts that have a certain package in their update list type
 
         $ rubdian queue -a -m apache2
 
