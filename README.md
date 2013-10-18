@@ -14,6 +14,23 @@ To install rubdian run:
 
 rubdian will print a post installation message. **It might be worth to read it.**
 
+## Install from source
+
+To install rubdian (e.g. the latest development version) from source, clone this repository first:
+
+        $ git clone https://gitlab.corpex-net.de/corpex/rubdian.git
+
+Change into the newly created directory
+
+        $ cd rubdian
+
+Build and install the gem using bundler
+
+        $ bundle install
+
+If bundler is not install, install it
+
+        $ gem install bundler
 
 ## Updating
 
