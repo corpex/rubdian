@@ -24,7 +24,21 @@ Change into the newly created directory
 
         $ cd rubdian
 
-TODO
+Install rubdian's dependencies
+
+        $ bundle install
+
+If you don't have bundle installed, install it by
+
+        $ gem install bundler
+
+or as root
+
+        $ sudo gem install bundler
+
+Now build and install the gem from source
+
+        $ rake install
 
 ## Updating
 
