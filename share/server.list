@@ -1,0 +1,7 @@
+#
+# Use this file for your list of servers
+#
+# server.domain.tld
+# server2.domain.tld
+# server3.domain.tld:3333 <- custom ssh port
+#################################################

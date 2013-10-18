@@ -35,6 +35,9 @@ module Rubdian; module Command
       puts "Installing default configuration file as #{distconf}\n\n"
       FileUtils.cp("#{gem_root}/share/rubdian.yml.dist", distconf)
 
+      FileUtils.cp("#{gem_root}/share/rubdian.local.yml", lopts[:directory]) if ! File.exists?("#{lopts[:directory]}/rubdian.local.yml")
+      FileUtils.cp("#{gem_root}/share/server.list", lopts[:directory]) if ! File.exists?("#{lopts[:directory]}/server.list")
+
       cfg = YAML.load_file(distconf)
       cfg['rubdian']['database']['uri'] = "sqlite://#{lopts[:directory]}/rubdian.db"
       cfg['rubdian']['version'] = Rubdian::VERSION
