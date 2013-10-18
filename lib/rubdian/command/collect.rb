@@ -3,11 +3,17 @@ require "cpx/distexec/executor/ssh"
 require "rubdian"
 require "logger"
 require "rubdian/database"
+require "rubdian/trollop"
+
 module Rubdian; module Command
   module Collect
     def self.main(opts = {})
       logger = Rubdian.logger
       cfg = Rubdian.config
+
+      lopts = Trollop::options do
+        banner "No options."
+      end
 
       require cfg['rubdian']['distexec']['backend']['require']
       _beclass = eval(cfg['rubdian']['distexec']['backend']['driver']) # dirty
