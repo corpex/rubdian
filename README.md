@@ -254,7 +254,7 @@ You can also send an email to bugs+rubdian@corpex.de or yell at me, if you're ar
 
 ## Donations
 
-If you think rubdian improved your life drop me some nuts.
+If you think rubdian improved your life drop us some nuts.
 
 ## Contributing
 
