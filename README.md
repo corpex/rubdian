@@ -8,7 +8,7 @@ It can blacklist certain packages to prevent unwanted behaviour.  (e.g. unattend
 
 rubdian is currently in **alpha** state. This means it might do something not as expected and in the worst case cause serious problems if upgrading an actual blacklisted item due to a bug in the blacklist command.
 
-rubdian is being developed in an environment with a hundreds of servers so we actually take care to not break things. Before we actually use the rubdian development branch (master) we test it in a simulated environment of a few servers, testing blacklists etc. We do not use unit tests at the moment so it there is lot of room for bugs either trivial or critical.
+rubdian is being developed in an environment with a hundreds of servers so we actually take care to not break things. Before we use the rubdian development branch (master) on our own, we test it in a simulated environment of a few servers. This does **not** mean that you can expect a working copy in this repository since we don't use any unit tests at all in the moment meaning there is a lot of room for bugs.
 
 The rubdian gem is currently only available in our own network and not yet pushed to rubygems.org or something. If you already want to test rubdian, you have to build it from source which makes it even more dangerous to use.
 
