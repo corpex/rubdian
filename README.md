@@ -1,8 +1,10 @@
-# Rubdian
+# rubdian - debian update tool
 
-rubdian is a tool to automatically collect available updates on debian based systems.
+rubdian is a commandline tool to help you keep debian based systems such as Debian, Ubuntu, and so on updated.
 
-It can blacklist certain packages to prevent unwanted behaviour.  (e.g. unattended restart of a database)
+rubdian is developed by a team of fully-fledged linux system operators located in Hamburg, Germany. You can visit our company's website at http://www.corpex.de
+
+As stated, we are actually *system operators* and not *software developer* whereas a few of us have some knowledge in it. If you want to correct our code or have suggestions to make things better, you're welcome to support us in developing rubdian. See the 'Contributing' section at the end of this document on how to do so.
 
 ## Important informations
 
