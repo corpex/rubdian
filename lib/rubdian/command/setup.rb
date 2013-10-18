@@ -37,6 +37,8 @@ module Rubdian; module Command
 
       cfg = YAML.load_file(distconf)
       cfg['rubdian']['database']['uri'] = "sqlite://#{lopts[:directory]}/rubdian.db"
+      cfg['rubdian']['version'] = Rubdian::VERSION
+
       File.open(_cfg, "w+") do |f|
         f.write(cfg.to_yaml)
       end
