@@ -50,7 +50,23 @@ Please ensure to backup your configuration before you upgrade. It is best to bac
 
         $ rubdian setup
 
+## Configuration
 
+rubdian uses a YAML file for its configuration parameters. Everytime you upgrade rubdian, you should run
+
+        $ rubdian setup
+
+This will overwrite rubdian.yml in $RUBDIAN\_HOME. Never edit rubdian.yml directly. If you want to make custom changes, create a file called *rubdian.local.yml* in $RUBDIAN\_HOME and simply overwrite the changes there. If you, for example, want to overwrite the command to collect the updates, you would do:
+
+        $ vi $RUBDIAN_HOME/rubdian.local.yml
+
+and add
+
+        rubdian:
+                commands:
+                        collect: yournewcommand && apt-get upgrade -s
+
+This will prevent the loss of your custom made changes after a rubdian upgrade.
 
 ## Usage
 

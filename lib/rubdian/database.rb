@@ -30,6 +30,7 @@ module Rubdian; module Database
     exit 1
   rescue Exception => e
     Rubdian.logger.error("Error while connecting to database: #{e.message}")
+    exit 1
   end
   class Node < Sequel::Model(@db[:nodes]); end
   class Blacklist < Sequel::Model(@db[:blacklist]); end
