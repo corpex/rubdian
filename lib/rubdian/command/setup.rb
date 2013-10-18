@@ -32,9 +32,6 @@ module Rubdian; module Command
       _cfg = "#{lopts[:directory]}/rubdian.yml"
       distconf = "#{_cfg}.dist"
 
-      puts "Installing default configuration file as #{distconf}\n\n"
-      FileUtils.cp("#{gem_root}/share/rubdian.yml.dist", distconf)
-
       FileUtils.cp("#{gem_root}/share/rubdian.local.yml", lopts[:directory]) if ! File.exists?("#{lopts[:directory]}/rubdian.local.yml")
       FileUtils.cp("#{gem_root}/share/server.list", lopts[:directory]) if ! File.exists?("#{lopts[:directory]}/server.list")
 
@@ -54,9 +51,9 @@ module Rubdian; module Command
       puts "automatically install its database schema if possible.\n\n"
       puts "A default configuration file has been generated to\n\n"
       puts "\t#{_cfg}\n".bold
-      puts "without comments. To create your very own configuration,\ncopy\n\n"
-      puts "\t#{distconf}\n".bold
-      puts "and start editing.\n\n"
+      puts "without comments. To create your own configuration, open\n\n"
+      puts "\t#{lopts[:directory]}/rubdian.local.yml\n".bold
+      puts "with your favourite editor and start editing.\n\n"
       puts "Please report bugs to bugs+rubdian@corpex.de\n\n"
     end
   end
