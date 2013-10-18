@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.description   = %q{Manage debian update on remote systems.}
   spec.summary       = %q{Collect and update debian updates on several remote machines.}
   spec.homepage      = ""
-  spec.license       = "apache-2.0"
+  spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
