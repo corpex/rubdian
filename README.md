@@ -108,7 +108,7 @@ Setup will generate a rubdian.yml configuration file without any comments in it.
 
 rubdian uses a database to store informations about the collected updates, blacklist, etc.
 
-By default it is using a sqlite3 database *$RUBDIAN\_HOME/rubdian.db*.  The database is automatically being created when rubdian starts for the first time.
+By default it is using a sqlite3 database located at *$RUBDIAN\_HOME/rubdian.db*.  The database is automatically being created when rubdian starts for the first time.
 
 rubdian is using Sequel (http://sequel.rubyforge.org/) for its database communication and thus it supports all kind of databases supported by Sequel.
 
