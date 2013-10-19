@@ -64,11 +64,7 @@ To get the latest stable version of rubdian update it with the gem command
 
         $ gem update rubdian
 
-Please ensure to backup your configuration before you upgrade. It is best to backup the whole rubdian homedirectory, except logs. After you did the update for rubdian, rerun
-
-        $ rubdian setup
-
-## From source
+### From source
 
 The get the latest development version you simply update your repository (see Installation from source) by
 
@@ -77,6 +73,13 @@ The get the latest development version you simply update your repository (see In
 and then install the game with
 
         $ rake install
+
+
+### Update your configuration
+
+It might happen that we change rubdian's configuration layout so you should rerun rubdian's setup to generate a new configuration file.
+
+        $ rubdian setup
 
 ## Configuration
 
