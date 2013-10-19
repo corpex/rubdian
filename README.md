@@ -176,6 +176,10 @@ It uses either $USER, $SUDO\_USER or $RUBDIAN\_USER as its default username to c
 
         $ rubdian -u yourusername
 
+or
+
+        $ export RUBDIAN_USER="yourusername"
+
 By default, rubdian expects to authenticate over ssh with key based authentication (which is recommended). If you're using a password for your connection you can let rubdian ask you once for it to use it onwards. This assumes that you're using the same password on every host rubdian performs on.
 
         $ rubdian -u yourusername -p
@@ -230,6 +234,7 @@ You have to queue the hosts you want to update.
 rubdian has a nice output to let you see all collected hosts along with their updates. It also shows you in different colors either if the host is already queued or if it has blocking packages.
 
         $ rubdian queue -l
+
 
 #### Adding a host to queue
 
