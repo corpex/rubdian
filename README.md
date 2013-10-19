@@ -31,9 +31,11 @@ There are 3 stages of using rubdian:
 
 rubdian is using the cpx-distexec library for its distributed command execution with the ssh executor and the file based backend. Since cpx-distexec is **highly** configurable, rubdian can be extend to read its server list out of any source you can imagine of. If there's not already a cpx-distexec-backend you want to use, you can write one on your own in a dead simple way. See https://gitlab.corpex-net.de/corpex/cpx-distexec for more informations about cpx-distexec.
 
-To collect the updates the output of 'apt-get upgrade -s' is being parsed. You can customize the command to collect the updates but ensure to run *apt-get upgrade -s* somewhere otherwise rubdian won't know about any updates. This might be changed in the future, if needed.
+To collect the updates the output of *apt-get upgrade -s* is being parsed. You can customize the command to collect the updates but ensure to run *apt-get upgrade -s* somewhere otherwise rubdian won't know about any updates. This might be changed in the future, if needed.
 
 After the updates have been collected you have to queue the hosts you want to upgrade. This is explained in a more deeper detail later on in this document.
+
+Last thing left: run the upgrade
 
 ## Installation
 
