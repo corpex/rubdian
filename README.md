@@ -216,9 +216,9 @@ Now that the authentication mechanism and server.list are explained, let's start
 
 rubdian can collect on multiple hosts in the same time.
 
-        $ rubdian [options] -c 10 collect
+        $ rubdian [options] -c 5 collect
 
-This will start 10 simultaneously threads.
+This will start 5 simultaneously threads.
 
 **Attention:** It is not recommended to use a count higher than 5, especially not on virtualized systems.
 
