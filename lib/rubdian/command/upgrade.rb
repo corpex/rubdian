@@ -3,7 +3,6 @@ require "rubdian/database"
 require "cpx/distexec"
 require "cpx/distexec/executor/ssh"
 require "cpx/distexec/node"
-require "resolv"
 require "logger"
 
 module Rubdian; module Command
@@ -20,7 +19,6 @@ module Rubdian; module Command
         begin
           n = Cpx::Distexec::Node.new
           n.hostname = node.hostname
-          n.ipaddress = Resolv.getaddress(node.hostname)
           if ! node.port.nil?
             n.port = node.port
           end
@@ -33,30 +31,35 @@ module Rubdian; module Command
       Cpx::Distexec.set_executor(Cpx::Distexec::Executor::SSH, :username => opts[:username], :timeout => 10, :user_known_hosts_file => '/dev/null')
 
       Cpx::Distexec.exec(Rubdian.config['rubdian']['commands']['upgrade'], :concurrent => opts[:concurrent], :execution_timeout => 3600, :nodes => nodes) do |node, executor|
-        _log = "#{Rubdian.default[:logdir]}/#{node.hostname}.log"
-        logger.debug("Upgrading #{node.hostname}, logging to #{_log}")
-        _logger = Logger.new(_log)
-        _logger.level = Rubdian.logger.level
+        _logger = nil
+        if opts[:log_split]
+          _log = "#{Rubdian.default[:logdir]}/#{node.hostname}.log"
+          _logger = Logger.new(_log)
+          _logger.level = Rubdian.logger.level
+        else
+          _logger = Rubdian.logger
+        end
         puts "Starting upgrade on #{node.hostname}"
         _hl = "-" * 80
         _start = Time.now
-        _logger.info(_hl)
-        _logger.info("Starting upgrade on #{Time.now}")
-        _logger.info("Upgrading following packages:")
-        _logger.info(node.data.updates.split(",").join(", "))
+        _logger.info(node.hostname) { _hl }
+        _logger.info(node.hostname) { "Starting upgrade on #{Time.now}" }
+        _logger.info(node.hostname) { "Using command: #{Rubdian.config['rubdian']['commands']['upgrade']}" }
+        _logger.info(node.hostname) { "Upgrading following packages: #{node.data.updates}" }
 
         executor.on_data do |data, type|
           case type
             when 0
-              _logger.info(type) { data.chomp }
+              _logger.info(node.hostname) { "#{type}: #{data.chomp}" }
             else
-              _logger.error(type) { data.chomp }
+              _logger.error(node.hostname) { "#{type}: #{data.chomp}" }
           end
         end
 
         executor.on_close {
-          puts "Upgrade on #{node.hostname} finished in #{Time.now - _start} seconds."
-          _logger.info("Upgrade finished. Took: #{Time.now - _start} seconds.")
+          _took = Time.now - _start
+          puts "Upgrade on #{node.hostname} finished in #{_took.round(1)} seconds."
+          _logger.info(node.hostname) { "Upgrade finished. Took: #{_took} seconds." }
           node.data.delete # remove node from database. the actual node is stored in data of the distexec node object. weird, I know.
         }
       end

@@ -48,6 +48,8 @@ EOF
   opt :source, "Use file as a server list.", :short => "-s", :default => Rubdian.default[:source]
   opt :username, "Username to use for ssh connections.", :short => "-u", :default => Rubdian.default[:username]
   opt :debug, "Enable debug messages.", :short => "-d", :default => false
+  opt :log_dir, "Set log directory", :short => "-L", :default => Rubdian.default[:logdir]
+  opt :log_split, "Split output of each node into single log files", :short => "-S", :default => true
   stop_on subs
 end
 
