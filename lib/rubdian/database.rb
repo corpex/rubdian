@@ -12,8 +12,8 @@ module Rubdian; module Database
         primary_key :id
         String :hostname
         Fixnum :port
-        TrueClass :blocked, :default => nil
-        TrueClass :queued, :default => nil
+        TrueClass :blocked, :default => false
+        TrueClass :queued, :default => false
         String :updates, :text => true, :default => nil
         String :blocks, :text => true, :default => nil
         DateTime :tstamp

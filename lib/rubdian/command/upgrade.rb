@@ -48,9 +48,9 @@ module Rubdian; module Command
         executor.on_data do |data, type|
           case type
             when 0
-              _logger.info(data.chomp)
+              _logger.info(type) { data.chomp }
             else
-              _logger.error(data.chomp)
+              _logger.error(type) { data.chomp }
           end
         end
 

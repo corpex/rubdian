@@ -46,11 +46,22 @@ EOF
         opt :add, "Add certain hosts (or all if hostlist is omitted) to queue", :short => "-a"
         opt :delete, "Delete certain hosts (or all if hostlist is omitted) from queue", :short => "-d"
         opt :match, "If used with -a, only hosts with updates matching this parameter will be added to queue. If used with -d, hosts with updates matching this parameter will be deleted from queue. can be a regular expression", :short => "-m", :multi => true, :type => String
-        opt :list, "List all queued nodes.", :short => "-l"
+        opt :list, "List all nodes", :short => "-l"
+        opt :list_queued, "List queued nodes", :short => "-q"
+        opt :list_unqueued, "List unqueued nodes", :short => "-n"
       end
 
       if lopts[:list]
-        all = Rubdian::Database::Node.filter()
+        filter = {}
+
+        if lopts[:list_queued]
+          filter.update({ :queued => 1 })
+        end
+
+        if lopts[:list_unqueued]
+          filter.update({ :queued => false })
+        end
+        all = Rubdian::Database::Node.filter(filter)
         all.each do |node|
           if lopts[:match].count > 0
             _ups = node.updates.split(",")
@@ -190,7 +201,7 @@ EOF
               logger.warn("QUEUE:add") { "Can not queue #{h}: not found in database." }
               next
             end
-            if (! node.blocks.nil? or ! node.blocks.empty?) and ! lopts[:force]
+            if ! node.blocks.empty? and ! lopts[:force]
               logger.warn("QUEUE:add") { "Skipping #{node.hostname} due to blocks. (#{node.blocks})" }
               next
             end
