@@ -83,7 +83,7 @@ To get the latest stable version of rubdian update it with the gem command
 
 ### From source
 
-The get the latest development version you simply update your repository (see Installation from source) by
+To get the latest development version you simply update your repository (see Installation from source) by
 
         $ cd rubdian; git pull
 
