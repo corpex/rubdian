@@ -222,7 +222,7 @@ This will start 5 simultaneously threads.
 
 **Attention:** It is not recommended to use a count higher than 5, especially not on virtualized systems.
 
-One can say 10 is a good value. **!!!!NO WARRANTY!!!!**
+One can say 5 is a good value. **!!!!NO WARRANTY!!!!**
 
 ### Queueing Hosts
 
