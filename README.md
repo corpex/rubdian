@@ -218,9 +218,9 @@ rubdian can collect on multiple hosts in the same time.
 
         $ rubdian [options] -c 10 collect
 
-Will start 10 simultaneously threads.
+This will start 10 simultaneously threads.
 
-**Attention:** It is not recommended to use a count higher than 10, especially not on virtualized systems.
+**Attention:** It is not recommended to use a count higher than 5, especially not on virtualized systems.
 
 One can say 10 is a good value. **!!!!NO WARRANTY!!!!**
 
@@ -276,7 +276,7 @@ To upgrade the packages type
 
         $ rubdian [options] upgrade
 
-You can also use *-c* for the upgrade. As already mentioned above a higher count as 10 is **NOT** recommended! Use *-c* at your own risk!
+You can also use *-c* for the upgrade. As already mentioned above a higher count as 5 is **NOT** recommended! Use *-c* at your own risk!
 
 ## Troubleshooting
 

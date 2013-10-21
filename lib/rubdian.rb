@@ -31,6 +31,7 @@ module Rubdian
     return @default
   end
   def self.load_config
+    file = "#{@default[:home]}/rubdian.yml"
     _baseconfig = YAML.load_file("#{@default[:home]}/rubdian.yml")
     _cfgversion = _baseconfig['rubdian']['version']
     if _cfgversion.nil? or _cfgversion.empty? or (Gem::Version.new(Rubdian::VERSION) > Gem::Version.new(_cfgversion))
@@ -47,20 +48,20 @@ module Rubdian
     _local = "#{@default[:home]}/rubdian.local.yml"
     if File.exists?(_local)
       _localconfig = YAML.load_file(_local)
-
-      def self.confmerge(hsh1, hsh2)
-        hsh1.each do |k, v|
-          next if hsh2[k].nil?
-
-          if v.class.to_s == Hash.to_s
-            hsh1[k] = confmerge(hsh1[k], hsh2[k])
-          else
-            hsh1[k] = hsh2[k]
+      if _localconfig
+        def self.confmerge(hsh1, hsh2)
+          hsh1.each do |k, v|
+            next if hsh2[k].nil?
+            if v.class.to_s == Hash.to_s
+              hsh1[k] = confmerge(hsh1[k], hsh2[k])
+            else
+              hsh1[k] = hsh2[k]
+            end
           end
+          return hsh1
         end
-        return hsh1
+        _baseconfig = confmerge(_baseconfig, _localconfig)
       end
-      _baseconfig = confmerge(_baseconfig, _localconfig)
     end
     @config = _baseconfig
     return @config
