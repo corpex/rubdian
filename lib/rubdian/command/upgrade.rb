@@ -16,6 +16,7 @@ module Rubdian; module Command
       all = Rubdian::Database::Node.filter(:queued => 1)
       nodes = []
       all.each do |node|
+        logger.debug("Loading #{node.hostname} from queue.")
         begin
           n = Cpx::Distexec::Node.new
           n.hostname = node.hostname
@@ -29,8 +30,12 @@ module Rubdian; module Command
         end
       end
       Cpx::Distexec.set_executor(Cpx::Distexec::Executor::SSH, :username => opts[:username], :timeout => 10, :user_known_hosts_file => '/dev/null')
-
-      Cpx::Distexec.exec(Rubdian.config['rubdian']['commands']['upgrade'], :concurrent => opts[:concurrent], :execution_timeout => 3600, :nodes => nodes) do |node, executor|
+      counter = 0
+      processed = []
+      puts "Processing #{nodes.count} nodes... this may take a while"
+      start = Time.now
+      tooks = 0
+      Cpx::Distexec.exec(Rubdian.config['rubdian']['commands']['upgrade'], :concurrent => opts[:concurrent], :execution_timeout => 3600, :nodes => nodes, :trap => true) do |node, executor|
         _logger = nil
         if opts[:log_split]
           _log = "#{Rubdian.default[:logdir]}/#{node.hostname}.log"
@@ -58,12 +63,25 @@ module Rubdian; module Command
 
         executor.on_close {
           _took = Time.now - _start
-          puts "Upgrade on #{node.hostname} finished in #{_took.round(1)} seconds."
+          tooks += _took
+#          puts "Upgrade on #{node.hostname} finished in #{_took.round(1)} seconds."
           _logger.info(node.hostname) { "Upgrade finished. Took: #{_took} seconds." }
-          node.data.delete # remove node from database. the actual node is stored in data of the distexec node object. weird, I know.
+          processed << node
+          node.data.updates = nil
+          node.data.blocks = nil
+          node.data.queued = false
+          node.data.blocked = false
         }
       end
-
+      puts "#{processed.count} processed."
+      _took = Time.now - start
+      _seconds = _took % 60
+      _mins = _took / 60
+      _hours = _mins / 60
+      _mins = _mins % 60
+      _avg = tooks / processed.count
+      logger.info("Total time: #{_took} seconds.")
+      printf("Total time: %i Hours, %i Minutes and %i Seconds with an average of %f seconds per host.\n", _hours, _mins, _seconds, _avg)
     end
   end
 end; end

@@ -8,6 +8,13 @@ require "rubdian/trollop"
 module Rubdian; module Command
   module Collect
     def self.main(opts = {})
+      history = Rubdian::Database::History.new
+      history.begin = Time.now
+      history.action = "collect"
+      history.message = "collecting updates"
+      history.username = opts[:username]
+      history.options = opts.to_s
+
       logger = Rubdian.logger
       cfg = Rubdian.config
 
@@ -41,6 +48,11 @@ module Rubdian; module Command
       puts "Processing #{nodes.count} nodes... this may take a while."
       start = Time.now
       Cpx::Distexec.exec(cfg['rubdian']['commands']['collect'], :concurrent => opts[:concurrent], :execution_timeout => 160, :trap => true, :trap_message => "Waiting for remaining nodes.") do |node, executor|
+        _history = Rubdian::Database::History.new
+        _history.begin = Time.now
+        _history.action = "collect"
+        _history.username = opts[:username]
+        _history.options = opts.to_s
         processed << node
         counter += 1
         _logger = nil
@@ -117,7 +129,11 @@ module Rubdian; module Command
             n.save()
             collected << n
           end
-          puts "#{node.hostname}, #{_updates.count} updates and #{_blocks.count} blocks found."
+          _msg = "#{node.hostname}, #{_updates.count} updates and #{_blocks.count} blocks found."
+          _history.message = _msg
+          _history.end = Time.now
+          _history.save
+          puts _msg
         }
       end
       puts "#{processed.count} processed, #{collected.count} with updates."
@@ -128,6 +144,8 @@ module Rubdian; module Command
       _mins = _mins % 60
       _avg = tooks / processed.count
       logger.info("Total time: #{_took} seconds.")
+      history.end = Time.now
+      history.save
       printf("Total time: %i Hours, %i Minutes and %i Seconds with an average of %f seconds per host.\n", _hours, _mins, _seconds, _avg)
     end
   end

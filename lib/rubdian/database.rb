@@ -25,6 +25,17 @@ module Rubdian; module Database
         String :package
       end
     end
+    if ! @db.table_exists? :history
+      @db.create_table :history do
+        primary_key :id
+        DateTime :begin
+        DateTime :end
+        String :action
+        String :message, :text => true
+        String :username
+        String :options
+      end
+    end
   rescue Sequel::DatabaseError => e
     $stderr.puts "Could not connect to database: #{e.message}"
     $stderr.puts "Did you ran 'rubdian setup'?"
@@ -35,5 +46,5 @@ module Rubdian; module Database
   end
   class Node < Sequel::Model(@db[:nodes]); end
   class Blacklist < Sequel::Model(@db[:blacklist]); end
-
+  class History < Sequel::Model(@db[:history]); end
 end; end

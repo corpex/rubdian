@@ -50,7 +50,27 @@ EOF
         opt :list_queued, "List queued nodes", :short => "-q"
         opt :list_unqueued, "List unqueued nodes", :short => "-n"
         opt :short, "Just print the servernames when using -l", :short => "-s"
+        opt :apply_blacklist, "Apply current blacklist", :short => "-b"
         conflicts :list_queued, :list_unqueued
+      end
+
+      if lopts[:apply_blacklist]
+        nodes = Rubdian::Database::Node.filter
+        blacklist = Rubdian::Database::Blacklist.filter
+        nodes.each do |node|
+          _blocks = []
+          _ups = node.updates.split(",")
+          _ups.each do |u|
+            blacklist.each do |b|
+              if u.match(b.package)
+                _blocks << u
+              end
+            end
+          end
+          node.blocks = _blocks.join(",")
+          node.save
+        end
+        exit 0
       end
 
       if lopts[:list]
