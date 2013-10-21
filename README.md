@@ -242,6 +242,11 @@ rubdian has a nice output to let you see all collected hosts along with their up
 
         $ rubdian queue -ln
 
+#### List all hosts matching web
+
+        $ rubdian queue -l /web/
+
+
 #### Adding a host to queue
 
 To queue all hosts without blocking (blacklisted) packages type
