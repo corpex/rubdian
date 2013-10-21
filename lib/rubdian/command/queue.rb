@@ -61,22 +61,24 @@ EOF
         if lopts[:list_unqueued]
           filter.update({ :queued => false })
         end
+
         all = Rubdian::Database::Node.filter(filter)
         all.each do |node|
           if lopts[:match].count > 0
-            _ups = node.updates.split(",")
-            _matched = false
-            _ups.each do |up|
-              lopts[:match].each do |rx|
-                if up.match(rx)
-                  _matched = true
-                  break
-                end
-              end
-            end
-            if ! _matched
-              next
-            end
+            next if self.match!(node.updates.split(","), lopts[:match])
+#            _ups = node.updates.split(",")
+#            _matched = false
+#            _ups.each do |up|
+#              lopts[:match].each do |rx|
+#                if up.match(rx)
+#                  _matched = true
+#                  break
+#                end
+#              end
+#            end
+#            if ! _matched
+#              next
+#            end
           end
           _queued = " "
           _queued = "*".green if node.queued
@@ -102,16 +104,7 @@ EOF
           all = Rubdian::Database::Node.filter(:queued => 1)
           all.each do |node|
             if lopts[:match].count > 0
-              _ups = node.updates.split(",")
-              _matched = false
-              _ups.each do |up|
-                lopts[:match].each do |rx|
-                  if up.match(rx)
-                    _matched = true
-                    break
-                  end
-                end
-              end
+              _matched = self.match!(node.updates.split(","), lopts[:match])
               if ! _matched
                 logger.debug("QUEUE:delete") { "Skipping #{node.hostname}, updates do not match any of #{lopts[:match]}" }
                 next
@@ -131,16 +124,7 @@ EOF
               next
             end
             if lopts[:match].count > 0
-              _ups = node.updates.split(",")
-              _matched = false
-              _ups.each do |up|
-                lopts[:match].each do |rx|
-                  if up.match(rx)
-                    _matched = true
-                    break
-                  end
-                end
-              end
+              _matched = self.match!(node.updates.split(","), lopts[:match])
               if ! _matched
                 logger.debug("QUEUE:delete") { "Skipping #{node.hostname}, updates do not match any of #{lopts[:match]}" }
                 next
@@ -155,6 +139,10 @@ EOF
 
 
       if lopts[:add]
+        nodes = Rubdian::Database::Node.filter
+        filtered = self.filter_nodes(nodes, ARGV)
+
+
         if ARGV.count == 0
           # queue all hosts.
           all = Rubdian::Database::Node.filter
@@ -169,16 +157,7 @@ EOF
             end
 
             if lopts[:match].count > 0
-              _ups = node.updates.split(",")
-              _matched = false
-              _ups.each do |up|
-                lopts[:match].each do |rx|
-                  if up.match(rx)
-                    _matched = true
-                    break
-                  end
-                end
-              end
+              _matched = self.match!(node.updates.split(","), lopts[:match])
               if ! _matched
                 logger.debug("QUEUE:add") { "Skipping #{node.hostname}, updates do not match any of #{lopts[:match]}" }
                 next
@@ -207,16 +186,7 @@ EOF
             end
 
             if lopts[:match].count > 0
-              _ups = node.updates.split(",")
-              _matched = false
-              _ups.each do |up|
-                lopts[:match].each do |rx|
-                  if up.match(rx)
-                    _matched = true
-                    break
-                  end
-                end
-              end
+              _matched = self.match!(node.updates.split(","), lopts[:match])
               if ! _matched
                 logger.debug("Skipping #{node.hostname}, updates do not match any of #{lopts[:match]}")
                 next
@@ -231,6 +201,7 @@ EOF
         end
       end
     end
+
 
     def self.match(search, array, &blocks)
       _matches = []
@@ -253,6 +224,36 @@ EOF
         return matched
       end
       return nil
+    end
+
+    def self.filter_nodes(nodes, array, &blocks)
+      _result = []
+      nodes.each do |node|
+        array.each do |search|
+          if search.match(/^\//)
+            puts "Might regex? #{search}"
+            # expect regex. regex has to end with /
+            next if ! search.match(/\/$/)
+            puts "Is regex! #{node.hostname} =~ #{search}"
+            search = search.delete "/"
+            if node.hostname.match(search)
+              _result << node
+              yield(node, search) if block_given?
+              next
+            end
+          else
+            puts "No regex! #{node.hostname} == #{search}"
+            # expect full hostname
+            if node.hostname == search
+              puts "Got it."
+              _result << node
+              yield(node, search) if block_given?
+              next
+            end
+          end
+        end
+      end
+      return _result
     end
   end
 end; end
