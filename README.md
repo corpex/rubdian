@@ -234,11 +234,11 @@ rubdian has a nice output to let you see all collected hosts along with their up
 
         $ rubdian queue -l
 
-##### List all queued hosts
+#### List all queued hosts
 
         $ rubdian queue -lq
 
-##### List all unqueued hosts
+#### List all unqueued hosts
 
         $ rubdian queue -ln
 
