@@ -49,6 +49,8 @@ EOF
         opt :list, "List all nodes", :short => "-l"
         opt :list_queued, "List queued nodes", :short => "-q"
         opt :list_unqueued, "List unqueued nodes", :short => "-n"
+        opt :short, "Just print the servernames when using -l", :short => "-s"
+        conflicts :list_queued, :list_unqueued
       end
 
       if lopts[:list]
@@ -66,23 +68,27 @@ EOF
         nodes = self.filter_nodes(nodes, ARGV) if ARGV.count > 0
         nodes.each do |node|
           if lopts[:match].count > 0
-            next if self.match!(node.updates.split(","), lopts[:match])
+            next if ! self.match!(node.updates.split(","), lopts[:match])
           end
-          _queued = " "
-          _queued = "*".green if node.queued
-          _queued = "!".red if ! node.blocks.empty?
-          _queued = "#".yellow if ! node.blocks.empty? and node.queued
-          _blocks = node.blocks.split(",")
-          _updates = node.updates.split(",")
-          _pu = []
-          _updates.each do |u|
-            if _blocks.include? u
-              _pu << "#{u}".red
-            else
-              _pu << u
+          if ! lopts[:short]
+            _queued = " "
+            _queued = "*".green if node.queued
+            _queued = "!".red if ! node.blocks.empty?
+            _queued = "#".yellow if ! node.blocks.empty? and node.queued
+            _blocks = node.blocks.split(",")
+            _updates = node.updates.split(",")
+            _pu = []
+            _updates.each do |u|
+              if _blocks.include? u
+                _pu << "#{u}".red
+              else
+                _pu << u
+              end
             end
+            printf("  %s %-40s %-16s\n", _queued, node.hostname, _pu.join(", "))
+          else
+            printf("%s\n", node.hostname)
           end
-          printf("  %s %-40s %-16s\n", _queued, node.hostname, _pu.join(", "))
         end
       end
 
@@ -140,7 +146,6 @@ EOF
 
     def self.match(search, array, &blocks)
       _matches = []
-      puts search.class
       search = search.split() if search.class == String
       search.each do |string|
         array.each do |elem|
