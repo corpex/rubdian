@@ -10,6 +10,7 @@ require "colored"
 subcommands = {
   'blacklist' => 'Blacklist management',
   'collect' => 'Collect updates',
+  'history' => 'Show history',
   'queue' => 'Queue management',
   'setup' => 'Installs default configuration file',
   'upgrade' => 'Upgrade remote systems'
