@@ -231,5 +231,28 @@ EOF
         end
       end
     end
+
+    def self.match(search, array, &blocks)
+      _matches = []
+      puts search.class
+      search = search.split() if search.class == String
+      search.each do |string|
+        array.each do |elem|
+          if string.match(elem)
+            _matches << elem
+            yield(string, elem) if block_given?
+          end
+        end
+      end
+      _matches = nil if _matches.count == 0
+      return _matches
+    end
+    def self.match!(search, array, &blocks)
+      self.match(search, array) do |str, matched|
+        yield(str, matched) if block_given?
+        return matched
+      end
+      return nil
+    end
   end
 end; end
