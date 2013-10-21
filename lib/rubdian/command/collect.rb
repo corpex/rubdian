@@ -126,7 +126,7 @@ module Rubdian; module Command
       _mins = _took / 60
       _hours = _mins / 60
       _mins = _mins % 60
-      _avg = tooks / nodes.count
+      _avg = tooks / processed.count
       logger.info("Total time: #{_took} seconds.")
       printf("Total time: %i Hours, %i Minutes and %i Seconds with an average of %f seconds per host.\n", _hours, _mins, _seconds, _avg)
     end
