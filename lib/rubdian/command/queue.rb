@@ -62,23 +62,11 @@ EOF
           filter.update({ :queued => false })
         end
 
-        all = Rubdian::Database::Node.filter(filter)
-        all.each do |node|
+        nodes = Rubdian::Database::Node.filter(filter)
+        nodes = self.filter_nodes(nodes, ARGV) if ARGV.count > 0
+        nodes.each do |node|
           if lopts[:match].count > 0
             next if self.match!(node.updates.split(","), lopts[:match])
-#            _ups = node.updates.split(",")
-#            _matched = false
-#            _ups.each do |up|
-#              lopts[:match].each do |rx|
-#                if up.match(rx)
-#                  _matched = true
-#                  break
-#                end
-#              end
-#            end
-#            if ! _matched
-#              next
-#            end
           end
           _queued = " "
           _queued = "*".green if node.queued
@@ -99,106 +87,53 @@ EOF
       end
 
       if lopts[:delete]
-        if ARGV.count == 0
-          # remove all from queue
-          all = Rubdian::Database::Node.filter(:queued => 1)
-          all.each do |node|
-            if lopts[:match].count > 0
-              _matched = self.match!(node.updates.split(","), lopts[:match])
-              if ! _matched
-                logger.debug("QUEUE:delete") { "Skipping #{node.hostname}, updates do not match any of #{lopts[:match]}" }
-                next
-              end
-            end
-            logger.debug("QUEUE:delete") { "Removing #{node.hostname} from queue." }
-            node.queued = false
-            node.save
-          end
-          exit 0
-        else
-          # remove certain hosts from queue
-          ARGV.each do |h|
-            node = Rubdian::Database::Node.filter(:hostname => h).first()
-            if node.nil?
-              logger.error("QUEUE:delete") { "Can not remove #{h} from queue: not found in database." }
+        nodes = Rubdian::Database::Node.filter(:queued => 1)
+        nodes = self.filter_nodes(nodes, ARGV) if ARGV.count > 0
+        nodes.each do |node|
+          if lopts[:match].count > 0
+            _matched = self.match!(node.updates.split(","), lopts[:match])
+            if ! _matched
+              logger.debug("QUEUE:delete") { "Skipping #{node.hostname}, updates do not match any of #{lopts[:match]}" }
               next
             end
-            if lopts[:match].count > 0
-              _matched = self.match!(node.updates.split(","), lopts[:match])
-              if ! _matched
-                logger.debug("QUEUE:delete") { "Skipping #{node.hostname}, updates do not match any of #{lopts[:match]}" }
-                next
-              end
-            end
-            node.queued = false
-            node.save
           end
-          exit 0
+          logger.debug("QUEUE:delete") { "Removing #{node.hostname} from queue." }
+          node.queued = false
+          node.save
         end
+        exit 0
       end
 
 
       if lopts[:add]
         nodes = Rubdian::Database::Node.filter
-        filtered = self.filter_nodes(nodes, ARGV)
-
-
-        if ARGV.count == 0
-          # queue all hosts.
-          all = Rubdian::Database::Node.filter
-          all.each do |node|
-            if node.queued
-              logger.debug("QUEUE:add") { "Skipping #{node.hostname}, already queued." }
-              next
-            end
-            if ! node.blocks.empty? and ! lopts[:force]
-              logger.warn("QUEUE:add") { "Skipping #{node.hostname} due to blocks. (#{node.blocks})" }
-              next
-            end
-
-            if lopts[:match].count > 0
-              _matched = self.match!(node.updates.split(","), lopts[:match])
-              if ! _matched
-                logger.debug("QUEUE:add") { "Skipping #{node.hostname}, updates do not match any of #{lopts[:match]}" }
-                next
-              end
-            end
-            logger.info("QUEUE:add") { "Adding #{node.hostname} to queue. #{node.updates.split(",").count} updates, #{node.blocks.split(",").count} blocks" }
-            puts "Adding #{node.hostname} to queue (#{node.updates})\n"
-            node.queued = true
-            node.save
+        nodes = self.filter_nodes(nodes, ARGV) if ARGV.count > 0
+        nodes.each do |node|
+          if node.queued
+            logger.debug("QUEUE:add") { "Skipping #{node.hostname}, already queued." }
+            next
           end
-          queued = Rubdian::Database::Node.filter(:queued => 1)
-          logger.info("QUEUE:add") { "Queued #{queued.count} hosts." }
-          puts "Queued #{queued.count} hosts.\n"
-          exit 0
-        else
-          # queue certain hosts
-          ARGV.each do |h|
-            node = Rubdian::Database::Node.filter(:hostname => h).first()
-            if node.nil?
-              logger.warn("QUEUE:add") { "Can not queue #{h}: not found in database." }
-              next
-            end
-            if ! node.blocks.empty? and ! lopts[:force]
-              logger.warn("QUEUE:add") { "Skipping #{node.hostname} due to blocks. (#{node.blocks})" }
-              next
-            end
-
-            if lopts[:match].count > 0
-              _matched = self.match!(node.updates.split(","), lopts[:match])
-              if ! _matched
-                logger.debug("Skipping #{node.hostname}, updates do not match any of #{lopts[:match]}")
-                next
-              end
-            end
-            puts "Adding #{node.hostname} to queue\t(#{node.updates})\n"
-            logger.info("QUEUE:add") { "Adding #{node.hostname} to queue. #{node.updates.split(",").count} updates, #{node.blocks.split(",").count} blocks" }
-            node.queued = true
-            node.save()
+          if ! node.blocks.empty? and ! lopts[:force]
+            logger.warn("QUEUE:add") { "Skipping #{node.hostname} due to blocks. (#{node.blocks})" }
+            next
           end
-          exit 0
+
+          if lopts[:match].count > 0
+            _matched = self.match!(node.updates.split(","), lopts[:match])
+            if ! _matched
+              logger.debug("QUEUE:add") { "Skipping #{node.hostname}, updates do not match any of #{lopts[:match]}" }
+              next
+            end
+          end
+          logger.info("QUEUE:add") { "Adding #{node.hostname} to queue. #{node.updates.split(",").count} updates, #{node.blocks.split(",").count} blocks" }
+          puts "Adding #{node.hostname} to queue (#{node.updates})\n"
+          node.queued = true
+          node.save
         end
+        queued = Rubdian::Database::Node.filter(:queued => 1)
+        logger.info("QUEUE:add") { "Queued #{queued.count} hosts." }
+        puts "Queued #{queued.count} hosts.\n"
+        exit 0
       end
     end
 
@@ -231,10 +166,8 @@ EOF
       nodes.each do |node|
         array.each do |search|
           if search.match(/^\//)
-            puts "Might regex? #{search}"
             # expect regex. regex has to end with /
             next if ! search.match(/\/$/)
-            puts "Is regex! #{node.hostname} =~ #{search}"
             search = search.delete "/"
             if node.hostname.match(search)
               _result << node
@@ -242,10 +175,8 @@ EOF
               next
             end
           else
-            puts "No regex! #{node.hostname} == #{search}"
             # expect full hostname
             if node.hostname == search
-              puts "Got it."
               _result << node
               yield(node, search) if block_given?
               next
