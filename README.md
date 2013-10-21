@@ -228,7 +228,6 @@ One can say 10 is a good value. **!!!!NO WARRANTY!!!!**
 
 You have to queue the hosts you want to update.
 
-
 #### List all hosts
 
 rubdian has a nice output to let you see all collected hosts along with their updates. It also shows you in different colors either if the host is already queued or if it has blocking packages.
