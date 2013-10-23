@@ -5,11 +5,13 @@ require "rubdian/version"
 require "logger"
 require "rubdian/trollop"
 require "colored"
+require "cpx/distexec"
 
 # parse arguments
 subcommands = {
   'blacklist' => 'Blacklist management',
   'collect' => 'Collect updates',
+  'distexec' => 'Run command accross all nodes',
   'history' => 'Show history',
   'queue' => 'Queue management',
   'setup' => 'Installs default configuration file',
@@ -74,12 +76,16 @@ if ! File.exists?(Rubdian.default[:home]) and cmd != "setup"
 end
 
 if cmd != "setup"
-  Rubdian.logger("#{Rubdian.default[:logdir]}/rubdian.log", "weekly")
+  _log = "#{Rubdian.default[:logdir]}/rubdian.log"
+  Rubdian.logger(_log, "weekly")
+  Cpx::Distexec.logger=Rubdian.logger
   Rubdian.logger.level = Logger::INFO
   if gopts[:debug]
     Rubdian.logger.level = Logger::DEBUG
   end
 end
+
+Cpx::Distexec.logger.level = Rubdian.logger.level
 
 if cmd
   require "rubdian/command/#{cmd}"
