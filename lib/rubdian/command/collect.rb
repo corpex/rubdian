@@ -22,14 +22,14 @@ module Rubdian; module Command
         banner "No options."
       end
 
-      require cfg['rubdian']['distexec']['backend']['require']
-      _beclass = eval(cfg['rubdian']['distexec']['backend']['driver']) # dirty
+#      require cfg['rubdian']['distexec']['backend']['require']
+#      _beclass = eval(cfg['rubdian']['distexec']['backend']['driver']) # dirty
       Cpx::Distexec.logger.level = Logger::ERROR
-      if ! File.exists?(opts[:source])
-        $stderr.puts "source file #{opts[:source]} not found."
-        exit 1
-      end
-      Cpx::Distexec.set_backend(_beclass, :file => opts[:source])
+#      if ! File.exists?(opts[:source])
+#        $stderr.puts "source file #{opts[:source]} not found."
+#        exit 1
+#      end
+      Cpx::Distexec.set_backend(cfg['rubdian']['distexec']['backend']['driver'], :file => opts[:source])
       Cpx::Distexec.set_executor(Cpx::Distexec::Executor::SSH, :username => opts[:username], :timeout => 4, :user_known_hosts_file => '/dev/null')
       logger.info("collect") { "Loading nodes from #{opts[:source]}" }
       nodes = Cpx::Distexec.load_nodes
