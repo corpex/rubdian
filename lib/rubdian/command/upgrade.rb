@@ -67,8 +67,8 @@ module Rubdian; module Command
 #          puts "Upgrade on #{node.hostname} finished in #{_took.round(1)} seconds."
           _logger.info(node.hostname) { "Upgrade finished. Took: #{_took} seconds." }
           processed << node
-          node.data.updates = nil
-          node.data.blocks = nil
+          node.data.updates = ""
+          node.data.blocks = ""
           node.data.queued = false
           node.data.blocked = false
           node.data.save
