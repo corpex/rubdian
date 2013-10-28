@@ -17,7 +17,7 @@ rubdian:
         collect: sudo apt-get autoclean -y && sudo apt-get update -qq && sudo apt-get upgrade -s
 
         # this command will be used to actually run the upgrade.
-        upgrade: sudo bash -c 'DEBIAN_FRONTEND=noninteractive DEBIAN_PRIORITY=critical apt-get -q -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" upgrade'
+        upgrade: sudo bash -c 'PATH=/sbin:/usr/sbin:/bin:/usr/bin DEBIAN_FRONTEND=noninteractive DEBIAN_PRIORITY=critical apt-get -q -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" upgrade'
 
 
     #
