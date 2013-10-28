@@ -32,7 +32,7 @@ module Rubdian; module Command
       _cfg = "#{lopts[:directory]}/rubdian.yml"
       distconf = "#{_cfg}.dist"
 
-      FileUtils.cp("#{gem_root}/share/rubdian.yml.dist", lopts[:directory]) if ! File.exists?("#{lopts[:directory]}/rubdian.yml.dist")
+      FileUtils.cp("#{gem_root}/share/rubdian.yml.dist", lopts[:directory])
       FileUtils.cp("#{gem_root}/share/rubdian.local.yml", lopts[:directory]) if ! File.exists?("#{lopts[:directory]}/rubdian.local.yml")
       FileUtils.cp("#{gem_root}/share/server.list", lopts[:directory]) if ! File.exists?("#{lopts[:directory]}/server.list")
 
