@@ -71,7 +71,7 @@ module Rubdian; module Command
           node.data.blocks = nil
           node.data.queued = false
           node.data.blocked = false
-          node.save
+          node.data.save
         }
       end
       puts "#{processed.count} processed."
