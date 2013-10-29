@@ -137,6 +137,7 @@ EOF
         nodes = Rubdian::Database::Node.filter
         nodes = self.filter_nodes(nodes, ARGV) if ARGV.count > 0
         nodes.each do |node|
+          next if node.updates.nil? or node.updates.empty?
           if node.queued
             logger.debug("QUEUE:add") { "Skipping #{node.hostname}, already queued." }
             next
