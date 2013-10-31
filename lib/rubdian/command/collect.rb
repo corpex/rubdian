@@ -122,14 +122,23 @@ module Rubdian; module Command
           if _blocks.count > 0
             _logger.info(node.hostname) { "#{_blocks.count} Blocks: #{_blocks.join(", ")}" }
           end
+          _ups = _updates.count
+          _blks = _blocks.count
           if _updates.count > 0
             n.updates = _updates.join(",")
             n.blocks = _blocks.join(",")
             n.tstamp = Time.now
             n.save()
             collected << n
+            if _blks > 0
+              _blks = _blks.to_s.red
+              _ups = _ups.to_s.yellow
+            else
+              _ups = _ups.to_s.green
+            end
           end
-          _msg = "#{node.hostname}, #{_updates.count} updates and #{_blocks.count} blocks found."
+
+          _msg = "#{node.hostname}, #{_ups} updates and #{_blks} blocks found."
           _history.message = _msg
           _history.end = Time.now
           _history.save
