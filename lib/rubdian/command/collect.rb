@@ -71,9 +71,6 @@ module Rubdian; module Command
         _logger.info(node.hostname) { "Using command: #{cfg['rubdian']['commands']['collect']}" }
 
         n = Rubdian::Database::Node.filter(:hostname => node.hostname).first()
-        n.updates = ""
-        n.blocks = ""
-        n.blocked = false
         if n.nil?
           n = Rubdian::Database::Node.new
           n.hostname = node.hostname
@@ -81,6 +78,10 @@ module Rubdian; module Command
             n.port = node.port
           end
         end
+        n.updates = ""
+        n.blocks = ""
+        n.blocked = false
+        n.save
         _blocks = []
         _updates = []
         executor.on_data do |data, type|
