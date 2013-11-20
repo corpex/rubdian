@@ -45,7 +45,7 @@ EOF
         opt :force, "Force operation (i.e. ignore blocks)", :short => "-f"
         opt :add, "Add certain hosts (or all if hostlist is omitted) to queue", :short => "-a"
         opt :delete, "Delete certain hosts (or all if hostlist is omitted) from queue", :short => "-d"
-        opt :match, "If used with -a, only hosts with updates matching this parameter will be added to queue. If used with -d, hosts with updates matching this parameter will be deleted from queue. can be a regular expression", :short => "-m", :multi => true, :type => String
+        opt :match, "If used with -a, only hosts with updates matching this parameter will be added to queue. If used with -d, hosts with updates matching this parameter will be deleted from queue. must be a regular expression", :short => "-m", :multi => true, :type => String
         opt :list, "List all nodes", :short => "-l"
         opt :list_queued, "List queued nodes", :short => "-q"
         opt :list_unqueued, "List unqueued nodes", :short => "-n"
