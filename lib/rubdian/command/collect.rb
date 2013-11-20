@@ -81,7 +81,15 @@ module Rubdian; module Command
         n.updates = ""
         n.blocks = ""
         n.blocked = false
-        n.save
+        _retried = false
+        begin
+          n.save
+        rescue
+          # db may be locked due to -i dont know yet-, simply retry.
+          raise if _retried
+          _retried = true
+          retry
+        end
         _blocks = []
         _updates = []
         executor.on_data do |data, type|
