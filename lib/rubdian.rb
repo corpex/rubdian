@@ -72,15 +72,6 @@ module Rubdian
     return @config
   end
 
-  def self.load_hosts
-    logger = Rubdian.logger
-  end
-
-  def self.collect()
-    logger = Rubdian.logger
-
-  end
-
   def self.logger(out=STDOUT, rotate=nil)
         @logger = Logger.new(out, rotate) if ! @logger
         return @logger
