@@ -9,7 +9,7 @@ module Rubdian; module Command
       lopts = Trollop::options do
         banner <<-EOF
 Usage:
-  rubdian [options] hostlist
+  rubdian queue [options] hostlist
 
 Usage examples:
 
