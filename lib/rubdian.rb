@@ -46,7 +46,9 @@ module Rubdian
       exit 1
     end
     _local = "#{@default[:home]}/rubdian.local.yml"
+    self.logger.debug("Checking for local config #{_local}")
     if File.exists?(_local)
+      self.logger.debug("Loading #{_local}")
       _localconfig = YAML.load_file(_local)
       if _localconfig
         def self.confmerge(hsh1, hsh2)
@@ -60,10 +62,12 @@ module Rubdian
           end
           return hsh1
         end
+        self.logger.debug("Merging configs..")
         _baseconfig = confmerge(_baseconfig, _localconfig)
       end
     end
     @config = _baseconfig
+    self.logger.debug("Config is: #{@config.inspect}")
     return @config
   end
 

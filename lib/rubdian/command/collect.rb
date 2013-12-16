@@ -19,19 +19,34 @@ module Rubdian; module Command
       cfg = Rubdian.config
 
       lopts = Trollop::options do
-        banner "No options."
+        banner "Collect updates"
+        opt :filter, "Set filter in format key=value. Backend must support filtering. Can be used multiple times.", :short => "-F", :type => String, :multi => true
+      end
+      _filter = nil
+      if ! lopts[:filter].nil?
+        _filter = {}
+        lopts[:filter].each do |f|
+          next if ! (f =~ /=/)
+          spl = f.split("=")
+          _filter.update(spl[0] => spl[1])
+        end
       end
 
 #      require cfg['rubdian']['distexec']['backend']['require']
 #      _beclass = eval(cfg['rubdian']['distexec']['backend']['driver']) # dirty
-      Cpx::Distexec.logger.level = Logger::ERROR
+      Cpx::Distexec.logger.level = Rubdian.logger.level
 #      if ! File.exists?(opts[:source])
 #        $stderr.puts "source file #{opts[:source]} not found."
 #        exit 1
 #      end
-      Cpx::Distexec.set_backend(cfg['rubdian']['distexec']['backend']['driver'], :file => opts[:source])
+
+      _bopts = { :file => opts[:source] }
+
+      _bopts.update(:filter => _filter ) if ! _filter.nil?
+      logger.debug("Backend options: #{_bopts.inspect}")
+      Cpx::Distexec.set_backend(cfg['rubdian']['distexec']['backend']['driver'], _bopts)
       Cpx::Distexec.set_executor(Cpx::Distexec::Executor::SSH, :username => opts[:username], :timeout => 4, :user_known_hosts_file => '/dev/null')
-      logger.info("collect") { "Loading nodes from #{opts[:source]}" }
+      logger.info("collect") { "Loading nodes from #{cfg['rubdian']['distexec']['backend']['driver']}" }
       nodes = Cpx::Distexec.load_nodes
       logger.info("collect") { "#{nodes.count} nodes loaded." }
 
