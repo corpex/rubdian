@@ -154,9 +154,31 @@ rubdian is using Sequel (http://sequel.rubyforge.org/) for its database communic
 
 To configure a different database change the database connection uri in *$RUBDIAN\_HOME/rubdian.local.yml* as described in *$RUBDIAN\_HOME/rubdian.yml.dist*.
 
-### server.list
+### Data Backend
 
-By now, rubdian only supports plain text files as it's input source for hostnames to perform its operations on. The layout of such a file is very simple as it's basically just a newline seperated list of hostnames.
+#### distexec backends
+
+Since rubdian is using cpx-distexec for its command execution, it does support all backends cpx-distexec can work with. At the time of writing there are only 2 kinds of backends. The file based backend, meaning a simple plain text file with each server address per line and the foreman backend using the foreman api to collect hosts. See *$RUBDIAN\_HOME/rubdian.yml.dist* on how to change the backend.
+
+##### foreman backend
+
+To use the foreman backend you have to install the cpx-distexec-backend-foreman backend by typing
+
+        $ gem install cpx-distexec-backend-foreman
+
+And add the following lines to your *$RUBDIAN\_HOME/rubdian.local.yml*
+
+        rubdian:
+            distexec:
+                backend:
+                    driver: Cpx::Distexec::Backend::Foreman::Loader
+
+**-TODO-**
+*MISSING CONFIG. ADD PARAMETERS TO rubdian.local.yml*
+
+##### file backend: server.list
+
+The layout of such a file is very simple as it's basically just a newline seperated list of hostnames.
 
         server.domain.tld
         server2.domain.tld
