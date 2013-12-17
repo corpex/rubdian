@@ -39,6 +39,12 @@ Last thing left: run the upgrade
 
 ## Installation
 
+*As long as rubdian is not been added to rubygems.org, use our rubygems repo at http://rubygems.corpex-net.de*
+
+        gem sources -a http://rubygems.corpex-net.de
+
+
+
 rubdian needs at least ruby 1.9 and the sqlite3 development headers to build the sqlite3 gem.
 
 To install rubdian run:
@@ -87,7 +93,7 @@ To get the latest development version you simply update your repository (see Ins
 
         $ cd rubdian; git pull
 
-and then install the game with
+and then install the gem with
 
         $ rake install
 
