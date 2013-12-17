@@ -73,7 +73,7 @@ EOF
         exit 0
       end
 
-      if lopts[:list]
+      if lopts[:list] or lopts[:list_queued] or lopts[:list_unqueued]
         filter = {}
 
         if lopts[:list_queued]
