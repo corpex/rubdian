@@ -252,6 +252,16 @@ This will start 5 simultaneously threads.
 
 One can say 5 is a good value. **!!!!NO WARRANTY!!!!**
 
+#### Filtering
+
+You can now filter the node list you want to collect the updates on by using -F key=value for the collect subcommand.
+
+Since rubdian is using the cpx-distexec library, filtering must be supported by the cpx-distexec backend you're using. For now, the cpx-distexec-backend-foreman supports filtering by facts.
+
+For example to collect all updates only on Ubuntu nodes with the foreman cpx-distexec backend you would run:
+
+        $ rubdian collect -F operatingsystem=Ubuntu
+
 ### Queueing Hosts
 
 You have to queue the hosts you want to update.
