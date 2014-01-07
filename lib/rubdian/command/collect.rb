@@ -44,7 +44,12 @@ module Rubdian; module Command
 
       _bopts.update(:filter => _filter ) if ! _filter.nil?
       logger.debug("Backend options: #{_bopts.inspect}")
-      Cpx::Distexec.set_backend(cfg['rubdian']['distexec']['backend']['driver'], _bopts)
+      if opts[:source]
+        _be = opts[:source]
+      else
+        _be = cfg['rubdian']['distexec']['backend']['driver']
+      end
+      Cpx::Distexec.set_backend(_be, _bopts)
       Cpx::Distexec.set_executor(Cpx::Distexec::Executor::SSH, :username => opts[:username], :timeout => 4, :user_known_hosts_file => '/dev/null')
       logger.info("collect") { "Loading nodes from #{cfg['rubdian']['distexec']['backend']['driver']}" }
       nodes = Cpx::Distexec.load_nodes
