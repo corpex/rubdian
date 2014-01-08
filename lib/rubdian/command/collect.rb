@@ -53,7 +53,7 @@ module Rubdian; module Command
         blacklist << b.package
       end
 
-      if lopts[:show_hosts]
+      if lopts[:list_hosts]
         logger.debug("Show server list only")
         _nodes = Cpx::Distexec.load_nodes
         _nodes.each do |n|
