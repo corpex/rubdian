@@ -32,10 +32,10 @@ module Rubdian; module Command
 #        exit 1
 #      end
       _filter = []
-      _filter << lopts[:filter] << cfg['rubdian']['distexec']['backend']['filter'] if cfg['rubdian']['distexec']['backend']['filter']
-      _filter << opts[:filter] if ! lopts[:filter].nil?
+      _filter << cfg['rubdian']['distexec']['backend']['filter'] if cfg['rubdian']['distexec']['backend']['filter']
+      _filter << lopts[:filter] if ! lopts[:filter].nil?
       _bopts = { :file => opts[:source] }
-      _bopts.update(:filter => _filter)
+      _bopts.update(:filter => _filter.flatten)
       logger.debug("Backend options: #{_bopts.inspect}")
       if File.exists?(opts[:source]) and cfg['rubdian']['distexec']['backend']['driver'] == 'Cpx::Distexec::Backend::FileBackend' # very, VERY dirty..
         _be = opts[:source]

@@ -64,6 +64,7 @@ rubdian:
         backend:
             driver: Cpx::Distexec::Backend::FileBackend
             require: "cpx/distexec/backend/filebackend"
+            filter:
         executor:
             driver: Cpx::Distexec::Executor::SSH
             require: "cpx/distexec/executor/ssh"
