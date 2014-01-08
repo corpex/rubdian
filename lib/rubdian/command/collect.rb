@@ -21,9 +21,10 @@ module Rubdian; module Command
       lopts = Trollop::options do
         banner "Collect updates"
         opt :filter, "Set filter in format key=value. Backend must support filtering. Can be used multiple times.", :short => "-F", :type => String, :multi => true
+        opt :show_hosts, "Show hosts without collecting and exit.", :short => '-l', :default => false
       end
       _filter = nil
-      if ! lopts[:filter].nil?
+      if lopts[:filter].count > 0
         _filter = {}
         lopts[:filter].each do |f|
           next if ! (f =~ /=/)
@@ -44,7 +45,7 @@ module Rubdian; module Command
 
       _bopts.update(:filter => _filter ) if ! _filter.nil?
       logger.debug("Backend options: #{_bopts.inspect}")
-      if opts[:source]
+      if File.exists?(opts[:source]) and cfg['rubdian']['distexec']['backend']['driver'] == 'Cpx::Distexec::Backend::FileBackend' # very, VERY dirty..
         _be = opts[:source]
       else
         _be = cfg['rubdian']['distexec']['backend']['driver']
@@ -60,6 +61,16 @@ module Rubdian; module Command
       _blacklist.each do |b|
         blacklist << b.package
       end
+
+      if lopts[:show_hosts]
+        logger.debug("Show server list only")
+        _nodes = Cpx::Distexec.load_nodes
+        _nodes.each do |n|
+          puts n.hostname
+        end
+        exit 0
+      end
+
       logger.debug("Using #{cfg['rubdian']['commands']['collect']} to collect updates...")
       counter = 0
       collected = []

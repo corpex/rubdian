@@ -47,7 +47,7 @@ EOF
   banner "Global options:".bold
   opt :config, "Use different configfile", :short => "-f", :default => Rubdian.default[:config]
   opt :concurrent, "Number of concurrent threads", :short => "-c", :default => 1
-  opt :source, "Use file as a server list.", :short => "-s", :default => Rubdian.default[:source]
+  opt :source, "Use file as server list.", :short => "-s", :default => Rubdian.default[:source]
   opt :username, "Username to use for ssh connections.", :short => "-u", :default => Rubdian.default[:username]
   opt :debug, "Enable debug messages.", :short => "-d", :default => false
   opt :log_dir, "Set log directory", :short => "-L", :default => Rubdian.default[:logdir]
