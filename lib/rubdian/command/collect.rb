@@ -23,15 +23,6 @@ module Rubdian; module Command
         opt :filter, "Set filter in format key=value. Backend must support filtering. Can be used multiple times.", :short => "-F", :type => String, :multi => true
         opt :show_hosts, "Show hosts without collecting and exit.", :short => '-l', :default => false
       end
-      _filter = nil
-      if lopts[:filter].count > 0
-        _filter = {}
-        lopts[:filter].each do |f|
-          next if ! (f =~ /=/)
-          spl = f.split("=")
-          _filter.update(spl[0] => spl[1])
-        end
-      end
 
 #      require cfg['rubdian']['distexec']['backend']['require']
 #      _beclass = eval(cfg['rubdian']['distexec']['backend']['driver']) # dirty
@@ -43,7 +34,7 @@ module Rubdian; module Command
 
       _bopts = { :file => opts[:source] }
 
-      _bopts.update(:filter => _filter ) if ! _filter.nil?
+      _bopts.update(:filter => lopts[:filter] ) if ! lopts[:filter].nil?
       logger.debug("Backend options: #{_bopts.inspect}")
       if File.exists?(opts[:source]) and cfg['rubdian']['distexec']['backend']['driver'] == 'Cpx::Distexec::Backend::FileBackend' # very, VERY dirty..
         _be = opts[:source]
