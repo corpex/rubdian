@@ -31,10 +31,11 @@ module Rubdian; module Command
 #        $stderr.puts "source file #{opts[:source]} not found."
 #        exit 1
 #      end
-
+      _filter = []
+      _filter << lopts[:filter] << cfg['rubdian']['distexec']['backend']['filter'] if cfg['rubdian']['distexec']['backend']['filter']
+      _filter << opts[:filter] if ! lopts[:filter].nil?
       _bopts = { :file => opts[:source] }
-
-      _bopts.update(:filter => lopts[:filter] ) if ! lopts[:filter].nil?
+      _bopts.update(:filter => _filter)
       logger.debug("Backend options: #{_bopts.inspect}")
       if File.exists?(opts[:source]) and cfg['rubdian']['distexec']['backend']['driver'] == 'Cpx::Distexec::Backend::FileBackend' # very, VERY dirty..
         _be = opts[:source]
@@ -55,8 +56,7 @@ module Rubdian; module Command
 
       if lopts[:list_hosts]
         logger.debug("Show server list only")
-        _nodes = Cpx::Distexec.load_nodes
-        _nodes.each do |n|
+        nodes.each do |n|
           puts n.hostname
         end
         exit 0
