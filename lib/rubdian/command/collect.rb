@@ -21,7 +21,7 @@ module Rubdian; module Command
       lopts = Trollop::options do
         banner "Collect updates"
         opt :filter, "Set filter in format key=value. Backend must support filtering. Can be used multiple times.", :short => "-F", :type => String, :multi => true
-        opt :show_hosts, "Show hosts without collecting and exit.", :short => '-l', :default => false
+        opt :list_hosts, "Show hosts without collecting and exit.", :short => '-l', :default => false
       end
 
 #      require cfg['rubdian']['distexec']['backend']['require']
