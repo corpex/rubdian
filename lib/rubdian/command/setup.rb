@@ -7,15 +7,23 @@ require "yaml"
 module Rubdian; module Command
   module Setup
     def self.main(opts = {})
+      spec = Gem::Specification.find_by_name("rubdian")
+      gem_root = spec.gem_dir
+
       lopts = Trollop::options do
         opt :directory, "Install rubdian configuration into this directory.", :short => "-d", :default => Rubdian.default[:home]
+        opt :bash_completion, "Show bash completion config.", :short => '-C'
         version "rubdian #{Rubdian::VERSION} (c) 2013 CORPEX Internet GmbH"
       end
 
-      puts "Welcome to rubdian #{Rubdian::VERSION} setup\n".bold
 
-      spec = Gem::Specification.find_by_name("rubdian")
-      gem_root = spec.gem_dir
+      # just print bash_completion config for now.
+      if lopts[:bash_completion]
+        puts File.read("#{gem_root}/share/bash/rubdian.completion")
+        exit 0
+      end
+
+      puts "Welcome to rubdian #{Rubdian::VERSION} setup\n".bold
 
       puts "Checking if rubdian directory #{lopts[:directory]} already exists"
       if ! File.exists?(lopts[:directory])
