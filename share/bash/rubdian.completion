@@ -4,15 +4,15 @@ _rubdiancomp() {
 #  COMPREPLY=( $(compgen -W "blacklist collect history queue setup upgrade" -- $cur) )
 
 
-  local cur prev opts base args
+  local cur prev opts base prevprev
   cur="${COMP_WORDS[COMP_CWORD]}"
   prev="${COMP_WORDS[COMP_CWORD-1]}"
-  args="${COMP_WORDS[COMP_CWORD-2]}"
+  prevprev="${COMP_WORDS[COMP_CWORD-2]}"
   opts="blacklist collect history queue setup upgrade"
   
   case "${prev}" in
     --add|-a)
-      case "${args}" in
+      case "${prevprev}" in
         queue)
           local unqueued=$(rubdian queue -lsn)
           COMPREPLY=( $(compgen -W "${unqueued}" -- ${cur}) )
@@ -23,7 +23,7 @@ _rubdiancomp() {
       esac
     ;;
     --delete|-d)
-      case "${args}" in
+      case "${prevprev}" in
         queue)
           local queued=$(rubdian queue -lsq)
           COMPREPLY=( $(compgen -W "{queued}" -- ${cur}) )
@@ -31,9 +31,10 @@ _rubdiancomp() {
         ;;
         *)
         ;;
+      esac
     ;;
     queue)
-      local flags=$(rubdian queue --help | grep '\-\-' | awk -F ' ' '{print $1}' |sed -r "s/,$//g")
+      local flags=$(rubdian queue --help | grep '\-\-' | awk -F ' ' '{print $1}' |sed "s/,$//g")
       COMPREPLY=( $(compgen -W "${flags}" -- ${cur}) )
       return 0
     ;;
