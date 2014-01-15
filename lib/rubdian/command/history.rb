@@ -13,7 +13,7 @@ module Rubdian; module Command;
       if lopts[:limit] == 0
         history = Rubdian::Database::History.filter().order(:begin)
       else
-        history = Rubdian::Database::History.filter().order(:begin).last(lopts[:limit])
+        history = Rubdian::Database::History.filter().order(Sequel.desc(:end)).last(lopts[:limit])
       end
       width_max = `tput cols`.chomp.to_i
       line = "+#{"-" * (width_max - 2)}+"
